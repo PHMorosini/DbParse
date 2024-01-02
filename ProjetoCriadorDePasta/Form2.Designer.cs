@@ -32,6 +32,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.label1 = new System.Windows.Forms.Label();
             this.dgTabela = new System.Windows.Forms.DataGridView();
+            this.btConectarBanco = new System.Windows.Forms.Button();
+            this.btVoltar = new System.Windows.Forms.Button();
+            this.btCadastrarProjeto = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtNomeBusca = new System.Windows.Forms.TextBox();
+            this.btBuscar = new System.Windows.Forms.Button();
             this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nomeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.criadorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,13 +46,6 @@
             this.projetosCriadosVarejoDataSet = new ProjetoCriadorDePasta.ProjetosCriadosVarejoDataSet();
             this.projetosCriadosVarejoDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.nomeProjetoTableAdapter = new ProjetoCriadorDePasta.ProjetosCriadosVarejoDataSet1TableAdapters.NomeProjetoTableAdapter();
-            this.btConectarBanco = new System.Windows.Forms.Button();
-            this.btVoltar = new System.Windows.Forms.Button();
-            this.btCadastrarProjeto = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtNomeBusca = new System.Windows.Forms.TextBox();
-            this.btBuscar = new System.Windows.Forms.Button();
-            this.hpTexto = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.dgTabela)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nomeProjetoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projetosCriadosVarejoDataSet1)).BeginInit();
@@ -82,52 +81,6 @@
             this.dgTabela.TabIndex = 1;
             this.dgTabela.Visible = false;
             this.dgTabela.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // iDDataGridViewTextBoxColumn
-            // 
-            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
-            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
-            this.iDDataGridViewTextBoxColumn.ReadOnly = true;
-            this.iDDataGridViewTextBoxColumn.Width = 30;
-            // 
-            // nomeDataGridViewTextBoxColumn
-            // 
-            this.nomeDataGridViewTextBoxColumn.DataPropertyName = "Nome";
-            this.nomeDataGridViewTextBoxColumn.HeaderText = "Nome";
-            this.nomeDataGridViewTextBoxColumn.Name = "nomeDataGridViewTextBoxColumn";
-            this.nomeDataGridViewTextBoxColumn.Width = 150;
-            // 
-            // criadorDataGridViewTextBoxColumn
-            // 
-            this.criadorDataGridViewTextBoxColumn.DataPropertyName = "Criador";
-            this.criadorDataGridViewTextBoxColumn.HeaderText = "Criador";
-            this.criadorDataGridViewTextBoxColumn.Name = "criadorDataGridViewTextBoxColumn";
-            this.criadorDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // nomeProjetoBindingSource
-            // 
-            this.nomeProjetoBindingSource.DataMember = "NomeProjeto";
-            this.nomeProjetoBindingSource.DataSource = this.projetosCriadosVarejoDataSet1;
-            // 
-            // projetosCriadosVarejoDataSet1
-            // 
-            this.projetosCriadosVarejoDataSet1.DataSetName = "ProjetosCriadosVarejoDataSet1";
-            this.projetosCriadosVarejoDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // projetosCriadosVarejoDataSet
-            // 
-            this.projetosCriadosVarejoDataSet.DataSetName = "ProjetosCriadosVarejoDataSet";
-            this.projetosCriadosVarejoDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // projetosCriadosVarejoDataSetBindingSource
-            // 
-            this.projetosCriadosVarejoDataSetBindingSource.DataSource = this.projetosCriadosVarejoDataSet;
-            this.projetosCriadosVarejoDataSetBindingSource.Position = 0;
-            // 
-            // nomeProjetoTableAdapter
-            // 
-            this.nomeProjetoTableAdapter.ClearBeforeFill = true;
             // 
             // btConectarBanco
             // 
@@ -198,6 +151,52 @@
             this.btBuscar.Visible = false;
             this.btBuscar.Click += new System.EventHandler(this.btBuscar_Click);
             // 
+            // iDDataGridViewTextBoxColumn
+            // 
+            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
+            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
+            this.iDDataGridViewTextBoxColumn.ReadOnly = true;
+            this.iDDataGridViewTextBoxColumn.Width = 30;
+            // 
+            // nomeDataGridViewTextBoxColumn
+            // 
+            this.nomeDataGridViewTextBoxColumn.DataPropertyName = "Nome";
+            this.nomeDataGridViewTextBoxColumn.HeaderText = "Nome";
+            this.nomeDataGridViewTextBoxColumn.Name = "nomeDataGridViewTextBoxColumn";
+            this.nomeDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // criadorDataGridViewTextBoxColumn
+            // 
+            this.criadorDataGridViewTextBoxColumn.DataPropertyName = "Criador";
+            this.criadorDataGridViewTextBoxColumn.HeaderText = "Criador";
+            this.criadorDataGridViewTextBoxColumn.Name = "criadorDataGridViewTextBoxColumn";
+            this.criadorDataGridViewTextBoxColumn.Width = 200;
+            // 
+            // nomeProjetoBindingSource
+            // 
+            this.nomeProjetoBindingSource.DataMember = "NomeProjeto";
+            this.nomeProjetoBindingSource.DataSource = this.projetosCriadosVarejoDataSet1;
+            // 
+            // projetosCriadosVarejoDataSet1
+            // 
+            this.projetosCriadosVarejoDataSet1.DataSetName = "ProjetosCriadosVarejoDataSet1";
+            this.projetosCriadosVarejoDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // projetosCriadosVarejoDataSet
+            // 
+            this.projetosCriadosVarejoDataSet.DataSetName = "ProjetosCriadosVarejoDataSet";
+            this.projetosCriadosVarejoDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // projetosCriadosVarejoDataSetBindingSource
+            // 
+            this.projetosCriadosVarejoDataSetBindingSource.DataSource = this.projetosCriadosVarejoDataSet;
+            this.projetosCriadosVarejoDataSetBindingSource.Position = 0;
+            // 
+            // nomeProjetoTableAdapter
+            // 
+            this.nomeProjetoTableAdapter.ClearBeforeFill = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -245,6 +244,5 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtNomeBusca;
         private System.Windows.Forms.Button btBuscar;
-        private System.Windows.Forms.HelpProvider hpTexto;
     }
 }
