@@ -42,6 +42,7 @@
             this.rbNewProject = new System.Windows.Forms.RadioButton();
             this.btCriarPasta = new System.Windows.Forms.Button();
             this.btChecarProjetos = new System.Windows.Forms.Button();
+            this.btAbrirQuerry = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Welcome
@@ -198,6 +199,17 @@
             this.btChecarProjetos.UseVisualStyleBackColor = false;
             this.btChecarProjetos.Click += new System.EventHandler(this.btChecarProjetos_Click);
             // 
+            // btAbrirQuerry
+            // 
+            this.btAbrirQuerry.BackColor = System.Drawing.Color.White;
+            this.btAbrirQuerry.Location = new System.Drawing.Point(459, 276);
+            this.btAbrirQuerry.Name = "btAbrirQuerry";
+            this.btAbrirQuerry.Size = new System.Drawing.Size(90, 46);
+            this.btAbrirQuerry.TabIndex = 14;
+            this.btAbrirQuerry.Text = "Fazer Querry WEB";
+            this.btAbrirQuerry.UseVisualStyleBackColor = false;
+            this.btAbrirQuerry.Click += new System.EventHandler(this.btAbrirQuerry_Click);
+            // 
             // Tela
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -206,6 +218,7 @@
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.BackgroundImage = global::ProjetoCriadorDePasta.Properties.Resources.logo;
             this.ClientSize = new System.Drawing.Size(561, 391);
+            this.Controls.Add(this.btAbrirQuerry);
             this.Controls.Add(this.btChecarProjetos);
             this.Controls.Add(this.btCriarPasta);
             this.Controls.Add(this.rbNewProject);
@@ -244,6 +257,7 @@
         private System.Windows.Forms.RadioButton rbNewProject;
         private System.Windows.Forms.Button btCriarPasta;
         private System.Windows.Forms.Button btChecarProjetos;
+        private System.Windows.Forms.Button btAbrirQuerry;
     }
 }
 

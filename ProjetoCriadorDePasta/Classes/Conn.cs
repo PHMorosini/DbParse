@@ -14,7 +14,7 @@ namespace ProjetoCriadorDePasta
         private static string password = "";
         public static string StrCon
         {
-            get { return "Data Source=" + server + "; Integrated Security = true;Initial Catalog =" + dataBase + "; User Id =" + user + "; Password=" + password; }
+        get { return "Data Source=" + server + "; Integrated Security = true;Initial Catalog =" + dataBase + "; User Id =" + user + "; Password=" + password; }
         }
 
 

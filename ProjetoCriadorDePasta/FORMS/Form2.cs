@@ -127,5 +127,10 @@ namespace ProjetoCriadorDePasta
                 }
             }
         }
+
+        private void txtNomeBusca_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

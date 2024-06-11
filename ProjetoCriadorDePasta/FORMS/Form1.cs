@@ -1,4 +1,5 @@
 ﻿using CriarPastaBancoNovo;
+using ProjetoCriadorDePasta.FORMS;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -136,7 +137,7 @@ namespace ProjetoCriadorDePasta
                 }
                 
             }
-            Application.Exit();
+            MessageBox.Show("Pasta criada com sucesso");
         }
 
         private void rbVarejo_CheckedChanged(object sender, EventArgs e)
@@ -195,6 +196,14 @@ namespace ProjetoCriadorDePasta
             Form2 Abrirtela2 = new Form2();
             Abrirtela2.Show();
             this.Hide();
+        }
+
+        private void btAbrirQuerry_Click(object sender, EventArgs e)
+        {
+            Form3 AbriTela = new Form3();
+            AbriTela.Show();
+            this.Hide();
+
         }
     }
 }
