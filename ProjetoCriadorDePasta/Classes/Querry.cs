@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Collections;
 using System.Security.AccessControl;
+using System.Data;
 namespace ProjetoCriadorDePasta.Classes
 {
     public class Querry
@@ -1608,8 +1609,368 @@ WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) AND CASE COALESCE(FORDOC.U
             }
         }
 
+        //Saldo zerado
+        public void GradeProdutoZerado(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
-        //querrys pra funfar com
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT 
+	CADPRO.ID AS PRODUTOID, 
+	'|',
+	ESTSAL.FILIAL AS FILIALID,
+	'|',
+	CASE
+		WHEN LEN(LTRIM(RTRIM(GRADE))) > 0
+			THEN LTRIM(RTRIM(GRADE))
+		ELSE 'U'
+	END AS GRADE,
+	'|',
+	0 AS QUANTIDADE,
+	'|',
+	case ESTGRA.ATIVO when 'true' then 1 else 0 end
+FROM CADPRO
+JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+JOIN ESTGRA ON ESTGRA.IDESTSAL = ESTSAL.ID
+WHERE CADPRO.ID > 1
+ORDER BY PRODUTOID ASC
+";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
+        //Metodos para os filtros de filial
+        public void Saldo(string LocalDiretorio,string filial)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT 
+	CADPRO.ID,
+	'|',
+	1,
+	'|',
+	1 AS TABELAPRECO,
+	'|',
+	NULL, --TABELAMARKUP.CODIGOMARKUP AS MARKUP,
+	'|',
+	COALESCE(ESTSAL.VRVENDAV, 0),
+	'|',
+	COALESCE(ESTSAL.VRCOMPRAV, 0),
+	'|',
+	COALESCE(ESTSAL.VRCUSTOV, 0),
+	'|',
+	COALESCE(ESTSAL.VRZEROV, 0),
+	'|',
+	COALESCE(ESTSAL.VRMEDIOV, 0),
+	'|',
+	COALESCE(ESTSAL.LUCROV, 0),
+	'|',
+	case ESTSAL.ATIVO when 'true' then 1 else 0 end
+ FROM CADPRO
+ JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+ LEFT JOIN (
+	SELECT
+	ROW_NUMBER() OVER(ORDER BY DATA) + 1 AS CODIGOMARKUP /* Markup 1 ja existe no banco da web */, CADMKP.ID, CADMKP.NOME, CADMKP.PERCENTUAL, CADMKP.ATIVO FROM CADMKP
+ ) AS TABELAMARKUP ON TABELAMARKUP.ID = ESTSAL.IDCADMKP
+ WHERE CADPRO.ID > 1 and estsal.filial = @filial
+ ORDER BY CADPRO.ID ASC
+";
+                    
+                    SqlCommand command = new SqlCommand(query, cn);
+                    command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
+                    SqlDataReader reader = command.ExecuteReader();
+                    
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void GradeProduto(string LocalDiretorio, string filial)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT 
+	CADPRO.ID AS PRODUTOID, 
+	'|',
+	ESTSAL.FILIAL AS FILIALID,
+	'|',
+	CASE
+		WHEN LEN(LTRIM(RTRIM(GRADE))) > 0
+			THEN LTRIM(RTRIM(GRADE))
+		ELSE 'U'
+	END AS GRADE,
+	'|',
+	ESTGRA.ESTOQUEFISICO AS QUANTIDADE,
+	'|',
+	case ESTGRA.ATIVO when 'true' then 1 else 0 end
+FROM CADPRO
+JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+JOIN ESTGRA ON ESTGRA.IDESTSAL = ESTSAL.ID
+WHERE CADPRO.ID > 1 and estsal.filial = @filial
+ORDER BY PRODUTOID ASC
+";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
+                    SqlDataReader reader = command.ExecuteReader();
+                    
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void Clidoc(string LocalDiretorio, string filial)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT
+	1,
+	'| ',		-- Codigo da Filial
+	CASE WHEN CADPOR.DEBITO = 'N' AND CADPOR.CREDITO = 'S' THEN '2' ELSE '1' END,			
+	'| ',		-- Tipo do Documento 1 - Receber e 2 - Pagar
+	CAST(CASE CLIDOC.CLIENTE WHEN 999999 THEN 406 ELSE COALESCE(CLIDOC.CLIENTE, 1) END AS VARCHAR(100)),			
+	'| ',		-- Codigo do Cliente
+	COALESCE(CLIDOC.CONTRATO, 0),		
+	'| ',		-- Numero do Documento
+	COALESCE(CLIDOC.PARCELA, ''),		
+	'| ',		-- Numero da Parcela
+	CONVERT(VARCHAR(100), CLIDOC.DT_EMISSAO, 103),			
+	'| ',		-- Data de Emissao
+	CONVERT(VARCHAR(100), CLIDOC.DT_VENCIMENTO, 103),			
+	'| ',		-- Data de Vencimento
+	CONVERT(VARCHAR(100), CLIDOC.DT_PAGAMENTO, 103),		
+	'| ',		-- Data de Baixa
+	CONVERT(VARCHAR(100), CLIDOC.DT_PRORROGACAO, 103),			
+	'| ',		-- Data de Prorrogacao
+	CAST(COALESCE(CLIDOC.VR_PARCELA, 0) AS VARCHAR(100)),			
+	'| ',		-- Valor da Parcela
+	COALESCE(CLIDOC.VR_JUROS, 0),			
+	'| ',		-- Valor de Juros
+	COALESCE(CLIDOC.VR_MULTA, 0),			
+	'| ',		-- Valor de Multa
+	COALESCE(CLIDOC.VR_DESCONTO, 0),			
+	'| ',		-- Valor de Desconto
+	COALESCE(VR_PAGO, 0) + COALESCE(VR_JUROS, 0) + COALESCE(VR_MULTA, 0) - COALESCE(VR_DESCONTO, 0),			
+	'| ',		-- Valor Baixado
+	COALESCE(CAST(CLIDOC.NOTA_FISCAL AS VARCHAR(100)), 'NULL'),		
+	'| ',		-- Numero da Nota Fiscal ou Cupom Fiscal
+	COALESCE(CAST(CLIDOC.FATURA AS VARCHAR(20)), ''),			
+	'| ',		-- Numero da Fatura
+	CAST(COALESCE(CLIDOC.DUPLICATA, '') AS VARCHAR(20)),			
+	'| ',		-- Numero da Duplicat
+	REPLACE(REPLACE(COALESCE(CLIDOC.TEXTO, ''), CHAR(13), ''), CHAR(10), ''),			
+	'| ',		-- Observacoes
+	case CLIDOC.ATIVO when 'true' then 1 else 0 end
+				-- Ativo
+
+FROM CLIDOC 
+LEFT JOIN CADPOR ON CADPOR.PORTADOR = CLIDOC.PORTADOR
+WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1 and clidoc.filial = @filial
+";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
+                    SqlDataReader reader = command.ExecuteReader();
+                   
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void Fordoc(string LocalDiretorio, string filial)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT
+	1,
+	'| ',		-- Codigo da Filial
+	CASE WHEN CADPOR.DEBITO = 'N' AND CADPOR.CREDITO = 'S' THEN '1' ELSE '2' END,			
+	'| ',		-- Tipo do Documento 1 - Receber e 2 - Pagar
+	FORDOC.FORNECEDOR ,			
+	'| ',		-- Codigo do Cliente
+	COALESCE(FORDOC.DOCUMENTO, 0),		
+	'| ',		-- Numero do Documento
+	COALESCE(FORDOC.PARCELA, ''),		
+	'| ',		-- Numero da Parcela
+	CONVERT(VARCHAR(100), FORDOC.DT_EMISSAO, 103),			
+	'| ',		-- Data de Emissao
+	CONVERT(VARCHAR(100), FORDOC.DT_VENCIMENTO, 103),			
+	'| ',		-- Data de Vencimento
+	CONVERT(VARCHAR(100), FORDOC.DT_PAGAMENTO, 103),		
+	'| ',		-- Data de Baixa
+	CONVERT(VARCHAR(100), FORDOC.DT_PRORROGACAO, 103),			
+	'| ',		-- Data de Prorrogacao
+	CAST(COALESCE(FORDOC.VR_PARCELA, 0) AS VARCHAR(100)),			
+	'| ',		-- Valor da Parcela
+	COALESCE(FORDOC.VR_JUROS, 0),			
+	'| ',		-- Valor de Juros
+	COALESCE(FORDOC.VR_MULTA, 0),			
+	'| ',		-- Valor de Multa
+	COALESCE(FORDOC.VR_DESCONTO, 0),			
+	'| ',		-- Valor de Desconto
+	COALESCE(VR_PAGO, 0) + COALESCE(VR_JUROS, 0) + COALESCE(VR_MULTA, 0) - COALESCE(VR_DESCONTO, 0),			
+	'| ',		-- Valor Baixado
+	COALESCE(CAST(FORDOC.NOTA_FISCAL AS VARCHAR(100)), 'NULL'),		
+	'| ',		-- Numero da Nota Fiscal ou Cupom Fiscal
+	'',			
+	'| ',		-- Numero da Fatura
+	CAST(COALESCE(FORDOC.DUPLICATA, '') AS VARCHAR(20)),			
+	'| ',		-- Numero da Duplicat
+	REPLACE(REPLACE(COALESCE(FORDOC.TEXTO, ''), CHAR(13), ''), CHAR(10), ''),			
+	'| ',		-- Observacoes
+	CASE COALESCE(FORDOC.USU_EXC, 0) WHEN 'false' THEN 1 ELSE 0 END
+				-- Ativo
+
+FROM FORDOC 
+LEFT JOIN CADPOR ON CADPOR.PORTADOR = FORDOC.PORTADOR
+WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) AND CASE COALESCE(FORDOC.USU_EXC, 0) WHEN 0 THEN 1 ELSE 0 END = 1 and fordoc.filial = @filial
+";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
+                    SqlDataReader reader = command.ExecuteReader();
+                    
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
     }
 }
 
