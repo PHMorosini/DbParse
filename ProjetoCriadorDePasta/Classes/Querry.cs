@@ -28,7 +28,7 @@ namespace ProjetoCriadorDePasta.Classes
                 {
                     cn.Open();
                     string query = @"
-                    SELECT
+                    SELECT distinct
 	PESSOA.ID,
 	'|',
 	CASE WHEN PESSOA.TIPONATUREZA = 'F' THEN 1
@@ -77,7 +77,8 @@ LEFT JOIN CONTRIBUINTE ON CONTRIBUINTE.ID = PESSOA.CONTRIBUINTEID
 left join CADCLI on CADCLI.NOME = PESSOA.NOME
 WHERE PESSOA.ID < 999999 ";
 
-                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlCommand command = new SqlCommand(query, cn) {
+                        CommandTimeout = 600 };
                     SqlDataReader reader = command.ExecuteReader();
 
                     StringBuilder resultStringBuilder = new StringBuilder();
@@ -116,7 +117,7 @@ WHERE PESSOA.ID < 999999 ";
                 {
                     cn.Open();
                     string query = @"
-                    SELECT
+                    SELECT distinct
 	PESSOA.ID,	
 	'|',
 	CASE WHEN LEN(ENDERECO.LOGRADOURO) < 2 THEN 'LOGRADOURO NAO INFORMADO' ELSE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
@@ -194,8 +195,7 @@ ORDER BY PESSOA.ID ASC";
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = @"
-                   SELECT
+                    string query = @"SELECT
 	PESSOAID,
 	'|',
 	case TIPOTELEFONE
@@ -205,10 +205,23 @@ ORDER BY PESSOA.ID ASC";
 	'|',
 	TELEFONE,
 	'|',
-	case ATIVO when 'true' then 1 else 0 end as ativo
+	1
 FROM PESSOATELEFONE
-WHERE PESSOAID < 999999
-ORDER BY PESSOAID ASC";
+WHERE PESSOAID < 999999 and telefone <> ''
+
+UNION ALL
+
+SELECT
+	CLIENTE,
+	'|',
+	2,
+	'|',
+	celular,
+	'|',
+	1
+FROM cadcli
+where celular <> 'NULL' and celular <> ''
+";
 
                     SqlCommand command = new SqlCommand(query, cn);
                     SqlDataReader reader = command.ExecuteReader();
@@ -249,7 +262,7 @@ ORDER BY PESSOAID ASC";
                 {
                     cn.Open();
                     string query = @"
-                  SELECT
+                  SELECT distinct
 	PESSOAID,
 	'|',
 	'0',
@@ -302,7 +315,7 @@ ORDER BY PESSOAID ASC
                 {
                     cn.Open();
                     string query = @"
-                   SELECT
+                   SELECT distinct
 	PESSOA.ID - 1000000,
 	'|',
 	CASE WHEN PESSOA.TIPONATUREZA = 'F' THEN 1
@@ -399,7 +412,7 @@ WHERE PESSOA.ID > 1000000 AND PESSOA.ID <= 2000000";
                 {
                     cn.Open();
                     string query = @"
-                  SELECT
+                  SELECT distinct
 	PESSOA.ID - 1000000,	
 	'|',
 	CASE WHEN LEN(ENDERECO.LOGRADOURO) < 2 THEN 'LOGRADOURO NAO INFORMADO' ELSE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
@@ -432,8 +445,7 @@ COALESCE(ENDERECO.BAIRRO, '')
 	case ENDERECO.ATIVO when 'TRUE' then 1 else 0 end
 FROM ENDERECO
 JOIN PESSOA ON PESSOA.ENDERECOID = ENDERECO.ID
-WHERE PESSOA.ID >= 1000000 AND PESSOA.ID < 2000000
-ORDER BY PESSOA.ID ASC";
+WHERE PESSOA.ID >= 1000000 AND PESSOA.ID < 2000000";
 
                     SqlCommand command = new SqlCommand(query, cn);
                     SqlDataReader reader = command.ExecuteReader();
@@ -473,18 +485,35 @@ ORDER BY PESSOA.ID ASC";
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = @"
-                  SELECT
+                    string query = @"SELECT
 	PESSOAID - 1000000,
 	'|',
-	TIPOTELEFONE,
+	case TIPOTELEFONE
+	when  9 then 2
+	else TIPOTELEFONE 
+	end as telefone,
 	'|',
 	TELEFONE,
 	'|',
-	case ATIVO when 'TRUE' then 1 else 0 end
+	ATIVO
 FROM PESSOATELEFONE
-WHERE PESSOAID >= 1000000 AND PESSOAID < 2000000
-ORDER BY PESSOAID ASC";
+WHERE PESSOAID >= 1000000 AND PESSOAID < 2000000 and telefone <> 'NULL' and telefone <> ''
+
+union all 
+
+SELECT
+	fornecedor,
+	'|',
+	2,
+	'|',
+	contato_celular,
+	'|',
+	1
+FROM cadfor
+where contato_celular <> 'NULL' and contato_celular <> ''
+
+
+";
 
                     SqlCommand command = new SqlCommand(query, cn);
                     SqlDataReader reader = command.ExecuteReader();
@@ -575,8 +604,7 @@ ORDER BY PESSOAID ASC";
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = @"
-                 SELECT
+                    string query = @"SELECT
 	FORNECEDOR,
 	'|',
 	CONTATO,
@@ -585,10 +613,11 @@ ORDER BY PESSOAID ASC";
 	'|',
 	CONTATO_E_MAIL,
 	'|',
-	CASE WHEN USU_EXC = 'FALSE' THEN 0 ELSE 1 END
+	1
 FROM CADFOR
 JOIN PESSOA ON PESSOA.ID = (CADFOR.FORNECEDOR + 1000000)
-WHERE CONTATO <> '' AND CONTATO IS NOT NULL";
+WHERE CONTATO <> '' AND CONTATO IS NOT NULL
+";
 
                     SqlCommand command = new SqlCommand(query, cn);
                     SqlDataReader reader = command.ExecuteReader();
@@ -1030,7 +1059,9 @@ ORDER BY LEN(ESTGRU.ID), ESTGRU.ID
 SELECT 
 	SEQ,
 	'|',
-	DESCRICAO,
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+COALESCE(DESCRICAO, '')
+,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
 	'|',
 	CODRELACIONAMENTO,
 	'|',
@@ -1254,7 +1285,8 @@ WHERE CADPRO.ID > 1
  ORDER BY CADPRO.ID ASC
 ";
 
-                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlCommand command = new SqlCommand(query, cn) {
+                        CommandTimeout = 600 };
                     SqlDataReader reader = command.ExecuteReader();
 
                     StringBuilder resultStringBuilder = new StringBuilder();
@@ -1313,7 +1345,10 @@ WHERE CADPRO.ID > 1
 ORDER BY PRODUTOID ASC
 ";
 
-                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
                     SqlDataReader reader = command.ExecuteReader();
 
                     StringBuilder resultStringBuilder = new StringBuilder();
@@ -1576,7 +1611,7 @@ WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1
 	'| ',		-- Numero da Duplicat
 	REPLACE(REPLACE(COALESCE(FORDOC.TEXTO, ''), CHAR(13), ''), CHAR(10), ''),			
 	'| ',		-- Observacoes
-	CASE COALESCE(FORDOC.USU_EXC, 0) WHEN 'false' THEN 1 ELSE 0 END
+	1
 				-- Ativo
 
 FROM FORDOC 
@@ -1645,7 +1680,10 @@ WHERE CADPRO.ID > 1
 ORDER BY PRODUTOID ASC
 ";
 
-                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
                     SqlDataReader reader = command.ExecuteReader();
 
                     StringBuilder resultStringBuilder = new StringBuilder();
@@ -1717,8 +1755,11 @@ ORDER BY PRODUTOID ASC
  WHERE CADPRO.ID > 1 and estsal.filial = @filial
  ORDER BY CADPRO.ID ASC
 ";
-                    
-                    SqlCommand command = new SqlCommand(query, cn);
+
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
                     command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
                     SqlDataReader reader = command.ExecuteReader();
                     
@@ -1778,7 +1819,10 @@ WHERE CADPRO.ID > 1 and estsal.filial = @filial
 ORDER BY PRODUTOID ASC
 ";
 
-                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
                     command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
                     SqlDataReader reader = command.ExecuteReader();
                     
@@ -1818,11 +1862,11 @@ ORDER BY PRODUTOID ASC
                 {
                     cn.Open();
                     string query = @"SELECT
-	1,
+	CAST(CLIDOC.FILIAL AS VARCHAR(100)),
 	'| ',		-- Codigo da Filial
 	CASE WHEN CADPOR.DEBITO = 'N' AND CADPOR.CREDITO = 'S' THEN '2' ELSE '1' END,			
 	'| ',		-- Tipo do Documento 1 - Receber e 2 - Pagar
-	CAST(CASE CLIDOC.CLIENTE WHEN 999999 THEN 406 ELSE COALESCE(CLIDOC.CLIENTE, 1) END AS VARCHAR(100)),			
+	CAST(CASE CLIDOC.CLIENTE WHEN 999999 THEN 1 ELSE COALESCE(CLIDOC.CLIENTE, 1) END AS VARCHAR(100)),			
 	'| ',		-- Codigo do Cliente
 	COALESCE(CLIDOC.CONTRATO, 0),		
 	'| ',		-- Numero do Documento
@@ -1854,7 +1898,7 @@ ORDER BY PRODUTOID ASC
 	'| ',		-- Numero da Duplicat
 	REPLACE(REPLACE(COALESCE(CLIDOC.TEXTO, ''), CHAR(13), ''), CHAR(10), ''),			
 	'| ',		-- Observacoes
-	case CLIDOC.ATIVO when 'true' then 1 else 0 end
+	CLIDOC.ATIVO 
 				-- Ativo
 
 FROM CLIDOC 
@@ -1938,12 +1982,12 @@ WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1 and c
 	'| ',		-- Numero da Duplicat
 	REPLACE(REPLACE(COALESCE(FORDOC.TEXTO, ''), CHAR(13), ''), CHAR(10), ''),			
 	'| ',		-- Observacoes
-	CASE COALESCE(FORDOC.USU_EXC, 0) WHEN 'false' THEN 1 ELSE 0 END
+	1
 				-- Ativo
 
 FROM FORDOC 
 LEFT JOIN CADPOR ON CADPOR.PORTADOR = FORDOC.PORTADOR
-WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) AND CASE COALESCE(FORDOC.USU_EXC, 0) WHEN 0 THEN 1 ELSE 0 END = 1 and fordoc.filial = @filial
+WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) and fordoc.filial = @filial
 ";
 
                     SqlCommand command = new SqlCommand(query, cn);
