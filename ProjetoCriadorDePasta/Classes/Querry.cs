@@ -13,6 +13,29 @@ namespace ProjetoCriadorDePasta.Classes
 {
     public class Querry
     {
+        public void CorrecoesBanco() 
+        {
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string update =
+                        "UPDATE ESTSAL SET VRVENDAV = 0.01 WHERE VRVENDAV = 0" +
+                        "UPDATE CADPRO SET ANPFISCALID = '' WHERE ANPFISCALID = 0";
+                    SqlCommand command = new SqlCommand(update, cn)
+                    { CommandTimeout = 600 };
+                    command.ExecuteNonQuery();                                              
+                    cn.Close();
+                    MessageBox.Show("Correções feitas no banco, prosseguindo com a extração dos dados...");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Não foi possivel realizar as correções no banco, Erro:" + ex.Message);
+            }
+        }
+
         public void Cliente(string LocalDiretorio)
         {
             try
@@ -64,7 +87,9 @@ COALESCE(PESSOA.PSEUDONIMO, '')
 	'|',
 	REPLACE(REPLACE(REPLACE(COALESCE(PESSOA.OBSERVACAOINTERNA, ''), CHAR(10), ''), CHAR(13), ''), '|', ''),
 	'|',
-	COALESCE(CONTRIBUINTE.TIPOCONTRIBUINTENFEFISCAL, '1') AS CONTRIBUINTE,		
+	case when PESSOA.INSCRICAOESTADUAL <> '' and PESSOA.INSCRICAOESTADUAL <> 'ISENTO' then 1
+	when PESSOA.INSCRICAOESTADUAL = 'ISENTO' then 2
+	when PESSOA.INSCRICAOESTADUAL = '' then 9 else 9 end as contribuinte,			
 	'|',
 	0 AS PERMITEAPROVEITAMENTOCREDITO,
 	'|',
@@ -351,7 +376,9 @@ COALESCE(PESSOA.PSEUDONIMO, '')
 	'|',
 	REPLACE(REPLACE(REPLACE(COALESCE(OBSERVACAOINTERNA, ''), CHAR(10), ''), CHAR(13), ''), '|', ''),
 	'|',
-	COALESCE(CONTRIBUINTE.TIPOCONTRIBUINTENFEFISCAL, 9),
+	case when PESSOA.INSCRICAOESTADUAL <> '' and PESSOA.INSCRICAOESTADUAL <> 'ISENTO' then 1
+	when PESSOA.INSCRICAOESTADUAL = 'ISENTO' then 2
+	when PESSOA.INSCRICAOESTADUAL = '' then 9 else 9 end as contribuinte,
 	'|',
 	CASE CADFOR.TIPO
 		WHEN 'F' THEN 2

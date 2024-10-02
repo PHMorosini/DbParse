@@ -205,5 +205,12 @@ namespace ProjetoCriadorDePasta
             this.Hide();
 
         }
+
+        private void btnStringConexão_Click(object sender, EventArgs e)
+        {
+            FrmStringBuilder AbrirTela = new FrmStringBuilder();
+            AbrirTela.Show();
+            this.Hide();
+        }
     }
 }

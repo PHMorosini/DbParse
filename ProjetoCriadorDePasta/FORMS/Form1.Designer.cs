@@ -43,6 +43,7 @@
             this.btCriarPasta = new System.Windows.Forms.Button();
             this.btChecarProjetos = new System.Windows.Forms.Button();
             this.btAbrirQuerry = new System.Windows.Forms.Button();
+            this.btnStringConexão = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Welcome
@@ -210,6 +211,17 @@
             this.btAbrirQuerry.UseVisualStyleBackColor = false;
             this.btAbrirQuerry.Click += new System.EventHandler(this.btAbrirQuerry_Click);
             // 
+            // btnStringConexão
+            // 
+            this.btnStringConexão.BackColor = System.Drawing.Color.White;
+            this.btnStringConexão.Location = new System.Drawing.Point(459, 217);
+            this.btnStringConexão.Name = "btnStringConexão";
+            this.btnStringConexão.Size = new System.Drawing.Size(90, 46);
+            this.btnStringConexão.TabIndex = 15;
+            this.btnStringConexão.Text = "CONFIGURAR CONEXÃO";
+            this.btnStringConexão.UseVisualStyleBackColor = false;
+            this.btnStringConexão.Click += new System.EventHandler(this.btnStringConexão_Click);
+            // 
             // Tela
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,6 +230,7 @@
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.BackgroundImage = global::ProjetoCriadorDePasta.Properties.Resources.logo;
             this.ClientSize = new System.Drawing.Size(561, 391);
+            this.Controls.Add(this.btnStringConexão);
             this.Controls.Add(this.btAbrirQuerry);
             this.Controls.Add(this.btChecarProjetos);
             this.Controls.Add(this.btCriarPasta);
@@ -258,6 +271,7 @@
         private System.Windows.Forms.Button btCriarPasta;
         private System.Windows.Forms.Button btChecarProjetos;
         private System.Windows.Forms.Button btAbrirQuerry;
+        private System.Windows.Forms.Button btnStringConexão;
     }
 }
 

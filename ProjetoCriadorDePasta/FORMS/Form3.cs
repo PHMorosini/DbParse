@@ -81,6 +81,8 @@ namespace ProjetoCriadorDePasta.FORMS
             string folderPath = txtDiretorio.Text;
             string filialescolhida = txtFilial.Text;
 
+            minhaQuerry.CorrecoesBanco();
+
             try
             {
                 if (folderPath.Length > 0)

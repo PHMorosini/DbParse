@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Banco.cs" />
     <Compile Include="Classes\Conn.cs" />
     <Compile Include="Classes\Conn2.cs" />
     <Compile Include="Classes\Querry.cs" />
@@ -67,6 +71,12 @@
     </Compile>
     <Compile Include="FORMS\Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FORMS\FrmStringBuilder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FORMS\FrmStringBuilder.Designer.cs">
+      <DependentUpon>FrmStringBuilder.cs</DependentUpon>
     </Compile>
     <Compile Include="ProjetosCriadosVarejoDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -95,6 +105,9 @@
     <EmbeddedResource Include="FORMS\Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FORMS\FrmStringBuilder.resx">
+      <DependentUpon>FrmStringBuilder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -108,6 +121,7 @@
     <EmbeddedResource Include="FORMS\TelaCadastro.resx">
       <DependentUpon>TelaCadastro.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="ProjetosCriadosVarejoDataSet.xsc">
       <DependentUpon>ProjetosCriadosVarejoDataSet.xsd</DependentUpon>
     </None>

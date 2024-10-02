@@ -1,21 +1,32 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ProjetoCriadorDePasta.Classes
 {
-    internal class Conn2
+    public class Conn2
     {
-        private static string server = @"MIGRACAO\OBJETIVA";
-        private static string dataBase = "EmpresarioZerado";
-        private static string user = @"OBJETIVA\migracao";
-        private static string password = "";
+        public static string _caminho;
+        public static string _nomeArquivo = "configuracao.json";
+        public static string _connectionString = "";
+
+        Banco banco = new Banco();
 
         public static string StrCon
         {
-            get { return "Data Source=" + server + "; Integrated Security = true;Initial Catalog =" + dataBase + "; User Id =" + user + "; Password=" + password; }
+
+            get
+            {
+                _caminho = Path.GetDirectoryName(Application.ExecutablePath);
+                var dados = File.ReadAllText(Path.Combine(_caminho, _nomeArquivo));
+                var configuracao = JsonConvert.DeserializeObject<Banco>(dados);
+                return _connectionString = $"Data Source={configuracao.Servidor};Integrated Security ={configuracao.IngtegratedSecurity} ;Initial Catalog={configuracao.Database};User ID={configuracao.Usuario};Password={configuracao.Senha};";
+            }
         }
 
     }
