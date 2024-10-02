@@ -22,7 +22,8 @@ namespace ProjetoCriadorDePasta.Classes
                     cn.Open();
                     string update =
                         "UPDATE ESTSAL SET VRVENDAV = 0.01 WHERE VRVENDAV = 0" +
-                        "UPDATE CADPRO SET ANPFISCALID = '' WHERE ANPFISCALID = 0";
+                        "UPDATE CADPRO SET ANPFISCALID = '' WHERE ANPFISCALID = 0" +
+                        "update NCMFISCAL set descricao = 'migrado' where descricao =''";
                     SqlCommand command = new SqlCommand(update, cn)
                     { CommandTimeout = 600 };
                     command.ExecuteNonQuery();                                              
