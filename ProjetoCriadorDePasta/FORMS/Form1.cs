@@ -46,117 +46,125 @@ namespace ProjetoCriadorDePasta
 
         private void btCriarPasta_Click(object sender, EventArgs e)
         {
-
-            // Verifica se o JSON foi carregado corretamente
-            if (diretorios == null)
+            try
             {
-                MessageBox.Show("Diretórios não carregados corretamente.");
-                return;
-            }
-
-            nomePastaPrincipal = Utilitys.LimparNomeDaPasta(nomePastaPrincipal);
-            string caminhoPastaPrincipal = Path.Combine(diretorios.Diretorio2, nomePastaPrincipal);
-
-            if (rbWEB.Checked)
-            {
-                // Cria a pasta principal
-                Directory.CreateDirectory(caminhoPastaPrincipal);
-                Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
-
-                // Caminho das pastas existentes - usando Diretorio1 do JSON
-                string caminhoPastaExistente1 = Path.Combine(diretorios.Diretorio1, "Banco");
-                string caminhoPastaExistente2 = Path.Combine(diretorios.Diretorio1, "ARQUIVOS_WEB_ZERADO");
-                string caminhoPastaExistente3 = Path.Combine(diretorios.Diretorio1, "Script_web_com_replace");
-
-                // Cria cópias das pastas existentes na pasta principal
-                Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
-                Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
-                Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
-            }
-            else
-            {
-                if (rbAtual.Checked)
+                // Verifica se o JSON foi carregado corretamente
+                if (diretorios == null)
                 {
-                    // Cria a pasta principal
-                    Directory.CreateDirectory(caminhoPastaPrincipal);
-
-                    // Caminho das pastas existentes
-                    string caminhoPastaExistente1 = @"D:\Migração\04A - Projetos\04A - Projetos\Atual Sistemas - PostgreSQL";
-                    string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
-                    string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
-                    string caminhoPastaExistente4 = @"D:\Migração\Arquivos uteis\Banco";
-
-
-                    // Cria cópias das pastas existentes na pasta principal
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente4, caminhoPastaPrincipal);
-
+                    MessageBox.Show("Diretórios não carregados corretamente.");
+                    return;
                 }
-                else if (rbUniplus.Checked)
-                {
 
-                    // Cria a pasta principal
-                    Directory.CreateDirectory(caminhoPastaPrincipal);
-                    Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
-
-                    // Caminho das pastas existentes
-                    string caminhoPastaExistente1 = @"D:\Migração\04A - Projetos\04A - Projetos\Uniplus";
-                    string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
-                    string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
-                    string caminhoPastaExistente4 = @"D:\Migração\Arquivos uteis\Banco";
+                    
+                    nomePastaPrincipal = Utilitys.LimparNomeDaPasta(nomePastaPrincipal);
+                    string caminhoPastaPrincipal = Path.Combine(diretorios.Diretorio2, nomePastaPrincipal);
 
 
-                    // Cria cópias das pastas existentes na pasta principal
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente4, caminhoPastaPrincipal);
-
-                }
-                else if (rbAlterData.Checked)
-                {
-
-                    // Cria a pasta principal
-                    Directory.CreateDirectory(caminhoPastaPrincipal);
-                    Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
-
-                    // Caminho das pastas existentes
-                    string caminhoPastaExistente1 = @"D:\Migração\04A - Projetos\04A - Projetos\AlterData";
-                    string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
-                    string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
-                    string caminhoPastaExistente4 = @"D:\Migração\Arquivos uteis\Banco";
-
-
-                    // Cria cópias das pastas existentes na pasta principal
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente4, caminhoPastaPrincipal);
-
-                }
-                else if (rbNewProject.Checked)
+                if (rbWEB.Checked)
                 {
                     // Cria a pasta principal
                     Directory.CreateDirectory(caminhoPastaPrincipal);
                     Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
 
-                    // Caminho das pastas existentes
-                    string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
-                    string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
-                    string caminhoPastaExistente1 = @"D:\Migração\Arquivos uteis\Banco";
-
+                    // Caminho das pastas existentes - usando Diretorio1 do JSON
+                    string caminhoPastaExistente1 = Path.Combine(diretorios.Diretorio1, "Banco");
+                    string caminhoPastaExistente2 = Path.Combine(diretorios.Diretorio1, "ARQUIVOS_WEB_ZERADO");
+                    string caminhoPastaExistente3 = Path.Combine(diretorios.Diretorio1, "Script_web_com_replace");
 
                     // Cria cópias das pastas existentes na pasta principal
                     Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
                     Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
                     Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
+                }
+                else
+                {
+                    if (rbAtual.Checked)
+                    {
+                        // Cria a pasta principal
+                        Directory.CreateDirectory(caminhoPastaPrincipal);
+
+                        // Caminho das pastas existentes
+                        string caminhoPastaExistente1 = @"D:\Migração\04A - Projetos\04A - Projetos\Atual Sistemas - PostgreSQL";
+                        string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
+                        string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
+                        string caminhoPastaExistente4 = @"D:\Migração\Arquivos uteis\Banco";
+
+
+                        // Cria cópias das pastas existentes na pasta principal
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente4, caminhoPastaPrincipal);
+
+                    }
+                    else if (rbUniplus.Checked)
+                    {
+
+                        // Cria a pasta principal
+                        Directory.CreateDirectory(caminhoPastaPrincipal);
+                        Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
+
+                        // Caminho das pastas existentes
+                        string caminhoPastaExistente1 = @"D:\Migração\04A - Projetos\04A - Projetos\Uniplus";
+                        string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
+                        string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
+                        string caminhoPastaExistente4 = @"D:\Migração\Arquivos uteis\Banco";
+
+
+                        // Cria cópias das pastas existentes na pasta principal
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente4, caminhoPastaPrincipal);
+
+                    }
+                    else if (rbAlterData.Checked)
+                    {
+
+                        // Cria a pasta principal
+                        Directory.CreateDirectory(caminhoPastaPrincipal);
+                        Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
+
+                        // Caminho das pastas existentes
+                        string caminhoPastaExistente1 = @"D:\Migração\04A - Projetos\04A - Projetos\AlterData";
+                        string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
+                        string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
+                        string caminhoPastaExistente4 = @"D:\Migração\Arquivos uteis\Banco";
+
+
+                        // Cria cópias das pastas existentes na pasta principal
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente4, caminhoPastaPrincipal);
+
+                    }
+                    else if (rbNewProject.Checked)
+                    {
+                        // Cria a pasta principal
+                        Directory.CreateDirectory(caminhoPastaPrincipal);
+                        Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
+
+                        // Caminho das pastas existentes
+                        string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\BancoVarejo";
+                        string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\ARQUIVOS";
+                        string caminhoPastaExistente1 = @"D:\Migração\Arquivos uteis\Banco";
+
+
+                        // Cria cópias das pastas existentes na pasta principal
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
+                        Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
+
+                    }
 
                 }
-                
+                MessageBox.Show("Pasta criada com sucesso");
             }
-            MessageBox.Show("Pasta criada com sucesso");
+            catch(Exception ex)
+            {  
+                MessageBox.Show("Erro:",ex.Message); 
+            }
         }
 
         private void rbVarejo_CheckedChanged(object sender, EventArgs e)
@@ -242,5 +250,7 @@ namespace ProjetoCriadorDePasta
             FormDirectoryPatch Form = new FormDirectoryPatch();
             Form.Show();
         }
+
+
     }
 }

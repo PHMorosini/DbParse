@@ -52,12 +52,20 @@ namespace CriarPastaBancoNovo
         //Limpa o nome da pasta pra garantir q nn tem coisa errada
         public static string LimparNomeDaPasta(string nomeDaPasta)
         {
+            try
+            { 
                 foreach (char c in Path.GetInvalidFileNameChars())
                 {
                     nomeDaPasta = nomeDaPasta.Replace(c.ToString(), "");
                 }
 
                 return nomeDaPasta;
+            }
+            catch(Exception e) { 
+            
+              MessageBox.Show("É necessario ter um nome para a pasta antes de criar-la.");
+                return null;
+            }
             
            
         }
