@@ -100,21 +100,21 @@
             this.txtPassword.Location = new System.Drawing.Point(118, 126);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(292, 20);
-            this.txtPassword.TabIndex = 5;
+            this.txtPassword.TabIndex = 3;
             // 
             // txtUser
             // 
             this.txtUser.Location = new System.Drawing.Point(118, 91);
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(292, 20);
-            this.txtUser.TabIndex = 6;
+            this.txtUser.TabIndex = 2;
             // 
             // txtDatabase
             // 
             this.txtDatabase.Location = new System.Drawing.Point(118, 63);
             this.txtDatabase.Name = "txtDatabase";
             this.txtDatabase.Size = new System.Drawing.Size(292, 20);
-            this.txtDatabase.TabIndex = 7;
+            this.txtDatabase.TabIndex = 1;
             // 
             // btnRetornar
             // 
@@ -143,7 +143,7 @@
             this.txtSecurity.Location = new System.Drawing.Point(118, 164);
             this.txtSecurity.Name = "txtSecurity";
             this.txtSecurity.Size = new System.Drawing.Size(292, 20);
-            this.txtSecurity.TabIndex = 11;
+            this.txtSecurity.TabIndex = 4;
             // 
             // label5
             // 

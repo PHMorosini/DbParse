@@ -45,10 +45,10 @@
             this.cbCliente = new System.Windows.Forms.CheckBox();
             this.cbFornecedor = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.cbFordoc = new System.Windows.Forms.CheckBox();
             this.cbClidoc = new System.Windows.Forms.CheckBox();
             this.cbCodbar = new System.Windows.Forms.CheckBox();
             this.cbProduto = new System.Windows.Forms.CheckBox();
-            this.cbFordoc = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -239,6 +239,16 @@
             this.panel2.Size = new System.Drawing.Size(206, 172);
             this.panel2.TabIndex = 10;
             // 
+            // cbFordoc
+            // 
+            this.cbFordoc.AutoSize = true;
+            this.cbFordoc.Location = new System.Drawing.Point(3, 151);
+            this.cbFordoc.Name = "cbFordoc";
+            this.cbFordoc.Size = new System.Drawing.Size(71, 17);
+            this.cbFordoc.TabIndex = 18;
+            this.cbFordoc.Text = "FORDOC";
+            this.cbFordoc.UseVisualStyleBackColor = true;
+            // 
             // cbClidoc
             // 
             this.cbClidoc.AutoSize = true;
@@ -270,16 +280,6 @@
             this.cbProduto.Text = "PRODUTO";
             this.cbProduto.UseVisualStyleBackColor = true;
             // 
-            // cbFordoc
-            // 
-            this.cbFordoc.AutoSize = true;
-            this.cbFordoc.Location = new System.Drawing.Point(3, 151);
-            this.cbFordoc.Name = "cbFordoc";
-            this.cbFordoc.Size = new System.Drawing.Size(71, 17);
-            this.cbFordoc.TabIndex = 18;
-            this.cbFordoc.Text = "FORDOC";
-            this.cbFordoc.UseVisualStyleBackColor = true;
-            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -296,6 +296,7 @@
             this.Controls.Add(this.btConectarBanco);
             this.Name = "Form3";
             this.Text = "Querry WEB";
+            this.Load += new System.EventHandler(this.Form3_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
