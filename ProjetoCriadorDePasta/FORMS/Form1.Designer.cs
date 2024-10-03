@@ -44,7 +44,7 @@
             this.btChecarProjetos = new System.Windows.Forms.Button();
             this.btAbrirQuerry = new System.Windows.Forms.Button();
             this.btnStringConexão = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.BtnCaminhoDiretorio = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Welcome
@@ -224,15 +224,16 @@
             this.btnStringConexão.UseVisualStyleBackColor = false;
             this.btnStringConexão.Click += new System.EventHandler(this.btnStringConexão_Click);
             // 
-            // button1
+            // BtnCaminhoDiretorio
             // 
-            this.button1.BackColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(459, 162);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 46);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "CAMINHO DIRETORIO";
-            this.button1.UseVisualStyleBackColor = false;
+            this.BtnCaminhoDiretorio.BackColor = System.Drawing.Color.White;
+            this.BtnCaminhoDiretorio.Location = new System.Drawing.Point(459, 162);
+            this.BtnCaminhoDiretorio.Name = "BtnCaminhoDiretorio";
+            this.BtnCaminhoDiretorio.Size = new System.Drawing.Size(90, 46);
+            this.BtnCaminhoDiretorio.TabIndex = 16;
+            this.BtnCaminhoDiretorio.Text = "CAMINHO DIRETORIO";
+            this.BtnCaminhoDiretorio.UseVisualStyleBackColor = false;
+            this.BtnCaminhoDiretorio.Click += new System.EventHandler(this.BtnCaminhoDiretorio_Click);
             // 
             // Tela
             // 
@@ -242,7 +243,7 @@
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.BackgroundImage = global::ProjetoCriadorDePasta.Properties.Resources.logo;
             this.ClientSize = new System.Drawing.Size(561, 391);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.BtnCaminhoDiretorio);
             this.Controls.Add(this.btnStringConexão);
             this.Controls.Add(this.btAbrirQuerry);
             this.Controls.Add(this.btChecarProjetos);
@@ -285,7 +286,7 @@
         private System.Windows.Forms.Button btChecarProjetos;
         private System.Windows.Forms.Button btAbrirQuerry;
         private System.Windows.Forms.Button btnStringConexão;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button BtnCaminhoDiretorio;
     }
 }
 

@@ -217,5 +217,11 @@ namespace ProjetoCriadorDePasta
         {
 
         }
+
+        private void BtnCaminhoDiretorio_Click(object sender, EventArgs e)
+        {
+            FormDirectoryPatch Form = new FormDirectoryPatch();
+            Form.Show();
+        }
     }
 }
