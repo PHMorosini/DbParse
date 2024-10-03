@@ -1,4 +1,5 @@
 ﻿using CriarPastaBancoNovo;
+using ProjetoCriadorDePasta.Classes;
 using ProjetoCriadorDePasta.FORMS;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,10 +17,21 @@ namespace ProjetoCriadorDePasta
 {
     public partial class Tela : Form
     {
+        private DiretoriosConfig diretorios;
         string nomePastaPrincipal;
         public Tela()
         {
             InitializeComponent();
+             string jsonFilePath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "ConfiguracaoDiretorio.json");
+        if (File.Exists(jsonFilePath))
+        {
+            string jsonString = File.ReadAllText(jsonFilePath);
+            diretorios = JsonSerializer.Deserialize<DiretoriosConfig>(jsonString);
+        }
+        else
+        {
+            MessageBox.Show("Arquivo de configuração não encontrado!");
+        }
         }
 
         private void Tela_Load(object sender, EventArgs e)
@@ -34,25 +47,31 @@ namespace ProjetoCriadorDePasta
         private void btCriarPasta_Click(object sender, EventArgs e)
         {
 
+            // Verifica se o JSON foi carregado corretamente
+            if (diretorios == null)
+            {
+                MessageBox.Show("Diretórios não carregados corretamente.");
+                return;
+            }
+
             nomePastaPrincipal = Utilitys.LimparNomeDaPasta(nomePastaPrincipal);
-            string caminhoPastaPrincipal = Path.Combine(@"D:\Migração\Bancos", nomePastaPrincipal);
+            string caminhoPastaPrincipal = Path.Combine(diretorios.Diretorio2, nomePastaPrincipal);
 
             if (rbWEB.Checked)
             {
-                    // Cria a pasta principal
-                    Directory.CreateDirectory(caminhoPastaPrincipal);
-                    Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
+                // Cria a pasta principal
+                Directory.CreateDirectory(caminhoPastaPrincipal);
+                Console.WriteLine($"Pasta principal '{nomePastaPrincipal}' criada com sucesso em {caminhoPastaPrincipal}");
 
-                    // Caminho das pastas existentes
-                    string caminhoPastaExistente1 = @"D:\Migração\Arquivos uteis\Banco";
-                    string caminhoPastaExistente2 = @"D:\Migração\Arquivos uteis\ARQUIVOS_WEB_ZERADO";
-                    string caminhoPastaExistente3 = @"D:\Migração\Arquivos uteis\Script_web_com_replace";
+                // Caminho das pastas existentes - usando Diretorio1 do JSON
+                string caminhoPastaExistente1 = Path.Combine(diretorios.Diretorio1, "Banco");
+                string caminhoPastaExistente2 = Path.Combine(diretorios.Diretorio1, "ARQUIVOS_WEB_ZERADO");
+                string caminhoPastaExistente3 = Path.Combine(diretorios.Diretorio1, "Script_web_com_replace");
 
-
-                    // Cria cópias das pastas existentes na pasta principal
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
-                    Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
+                // Cria cópias das pastas existentes na pasta principal
+                Utilitys.CriarCopiaPasta(caminhoPastaExistente1, caminhoPastaPrincipal);
+                Utilitys.CriarCopiaPasta(caminhoPastaExistente2, caminhoPastaPrincipal);
+                Utilitys.CriarCopiaPasta(caminhoPastaExistente3, caminhoPastaPrincipal);
             }
             else
             {

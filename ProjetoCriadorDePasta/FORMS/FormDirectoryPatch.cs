@@ -43,23 +43,19 @@ namespace ProjetoCriadorDePasta.FORMS
 
         public void CriarJsonCaminho()
         {
-            if (caminho1 != null && caminho2 != null ) {
-                caminho1 = txtDiretorio.Text;
-                caminho2 = txtDiretorio2.Text;
-
-
+            caminho1 = txtDiretorio.Text;
+            caminho2 = txtDiretorio2.Text;
+            if (caminho1 != null && caminho1 != "" && caminho2 != null && caminho2 != "" ) {             
                 var diretorios = new
                 {
                     Diretorio1 = caminho1,
                     Diretorio2 = caminho2
                 };
 
-                // Serializa o objeto para uma string JSON
                 string JsonString = System.Text.Json.JsonSerializer.Serialize(diretorios, new JsonSerializerOptions { WriteIndented = true });
-
-                // Escreve o JSON em um arquivo
-
                 File.WriteAllText(Path.Combine(_caminho, FileName), JsonString);
+                MessageBox.Show("Arquivo de configuração salvo com sucesso");
+                this.Close();
             }
             else { MessageBox.Show("Um dos diretorios não foi preenchido corretamente, favor corrigir"); }
         }
