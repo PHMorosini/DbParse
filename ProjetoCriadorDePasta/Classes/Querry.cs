@@ -225,7 +225,7 @@ ORDER BY PESSOA.ID ASC";
 	PESSOAID,
 	'|',
 	case TIPOTELEFONE
-	when  9 then 2
+	when  9 then 3
 	else TIPOTELEFONE 
 	end as telefone,
 	'|',

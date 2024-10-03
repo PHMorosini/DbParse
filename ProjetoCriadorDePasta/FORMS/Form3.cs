@@ -88,7 +88,7 @@ namespace ProjetoCriadorDePasta.FORMS
                 if (folderPath.Length > 0)
                 {
                     //cliente
-                    string client = Path.Combine(folderPath, "01 - CLIENTE.txt");
+                    string client = Path.Combine(folderPath, "01 - CLIENTES.txt");
                     string clientendereco = Path.Combine(folderPath, "01.1 - ENDERECOCLIENTE.txt");
                     string clientetelefone = Path.Combine(folderPath, "01.2 - TELEFONECLIENTE.txt");
                     string clienteemail = Path.Combine(folderPath, "01.3 - EMAILCLIENTE.txt");

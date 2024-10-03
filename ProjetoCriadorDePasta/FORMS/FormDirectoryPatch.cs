@@ -43,22 +43,35 @@ namespace ProjetoCriadorDePasta.FORMS
 
         public void CriarJsonCaminho()
         {
-            caminho1 = txtDiretorio.Text;
-            caminho2 = txtDiretorio2.Text;
-            if (caminho1 != null && caminho1 != "" && caminho2 != null && caminho2 != "" ) {             
-                var diretorios = new
-                {
-                    Diretorio1 = caminho1,
-                    Diretorio2 = caminho2
-                };
+            try
+            {
+                caminho1 = txtDiretorio.Text;
+                caminho2 = txtDiretorio2.Text;
 
-                string JsonString = System.Text.Json.JsonSerializer.Serialize(diretorios, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(Path.Combine(_caminho, FileName), JsonString);
-                MessageBox.Show("Arquivo de configuração salvo com sucesso");
-                this.Close();
+                if (!string.IsNullOrWhiteSpace(caminho1) && !string.IsNullOrWhiteSpace(caminho2))
+                {
+                    var diretorios = new
+                    {
+                        Diretorio1 = caminho1,
+                        Diretorio2 = caminho2
+                    };
+
+                    string jsonString = System.Text.Json.JsonSerializer.Serialize(diretorios, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(Path.Combine(_caminho, FileName), jsonString);
+                    MessageBox.Show("Arquivo de configuração salvo com sucesso");
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Um dos diretórios não foi preenchido corretamente, favor corrigir.");
+                }
             }
-            else { MessageBox.Show("Um dos diretorios não foi preenchido corretamente, favor corrigir"); }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocorreu um erro: {ex.Message}");
+            }
         }
+
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
