@@ -37,7 +37,6 @@
             this.criadorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nomeProjetoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.projetosCriadosVarejoDataSet1 = new ProjetoCriadorDePasta.ProjetosCriadosVarejoDataSet1();
-            this.btConectarBanco = new System.Windows.Forms.Button();
             this.btVoltar = new System.Windows.Forms.Button();
             this.btCadastrarProjeto = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,6 +45,11 @@
             this.projetosCriadosVarejoDataSet = new ProjetoCriadorDePasta.ProjetosCriadosVarejoDataSet();
             this.projetosCriadosVarejoDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.nomeProjetoTableAdapter = new ProjetoCriadorDePasta.ProjetosCriadosVarejoDataSet1TableAdapters.NomeProjetoTableAdapter();
+            this.BtnLogin = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtUsuario = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.TxtSenha = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgTabela)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nomeProjetoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projetosCriadosVarejoDataSet1)).BeginInit();
@@ -123,17 +127,6 @@
             this.projetosCriadosVarejoDataSet1.DataSetName = "ProjetosCriadosVarejoDataSet1";
             this.projetosCriadosVarejoDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // btConectarBanco
-            // 
-            this.btConectarBanco.BackColor = System.Drawing.Color.White;
-            this.btConectarBanco.Location = new System.Drawing.Point(200, 149);
-            this.btConectarBanco.Name = "btConectarBanco";
-            this.btConectarBanco.Size = new System.Drawing.Size(169, 48);
-            this.btConectarBanco.TabIndex = 2;
-            this.btConectarBanco.Text = "Conectar ao BD";
-            this.btConectarBanco.UseVisualStyleBackColor = false;
-            this.btConectarBanco.Click += new System.EventHandler(this.btConectarBanco_Click);
-            // 
             // btVoltar
             // 
             this.btVoltar.BackColor = System.Drawing.Color.White;
@@ -178,7 +171,6 @@
             this.txtNomeBusca.Size = new System.Drawing.Size(367, 20);
             this.txtNomeBusca.TabIndex = 6;
             this.txtNomeBusca.Visible = false;
-            this.txtNomeBusca.TextChanged += new System.EventHandler(this.txtNomeBusca_TextChanged);
             // 
             // btBuscar
             // 
@@ -207,18 +199,68 @@
             // 
             this.nomeProjetoTableAdapter.ClearBeforeFill = true;
             // 
+            // BtnLogin
+            // 
+            this.BtnLogin.BackColor = System.Drawing.Color.White;
+            this.BtnLogin.Location = new System.Drawing.Point(197, 237);
+            this.BtnLogin.Name = "BtnLogin";
+            this.BtnLogin.Size = new System.Drawing.Size(169, 48);
+            this.BtnLogin.TabIndex = 2;
+            this.BtnLogin.Text = "Login";
+            this.BtnLogin.UseVisualStyleBackColor = false;
+            this.BtnLogin.Click += new System.EventHandler(this.btConectarBanco_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(139, 117);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 22);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Usuario";
+            // 
+            // txtUsuario
+            // 
+            this.txtUsuario.Location = new System.Drawing.Point(216, 119);
+            this.txtUsuario.Name = "txtUsuario";
+            this.txtUsuario.Size = new System.Drawing.Size(248, 20);
+            this.txtUsuario.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(139, 151);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(62, 22);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Senha";
+            // 
+            // TxtSenha
+            // 
+            this.TxtSenha.Location = new System.Drawing.Point(216, 153);
+            this.TxtSenha.Name = "TxtSenha";
+            this.TxtSenha.Size = new System.Drawing.Size(248, 20);
+            this.TxtSenha.TabIndex = 11;
+            this.TxtSenha.UseSystemPasswordChar = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ProjetoCriadorDePasta.Properties.Resources.Logo01;
             this.ClientSize = new System.Drawing.Size(561, 391);
+            this.Controls.Add(this.TxtSenha);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtUsuario);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.btBuscar);
             this.Controls.Add(this.txtNomeBusca);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btCadastrarProjeto);
             this.Controls.Add(this.btVoltar);
-            this.Controls.Add(this.btConectarBanco);
+            this.Controls.Add(this.BtnLogin);
             this.Controls.Add(this.dgTabela);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -245,7 +287,6 @@
         private ProjetosCriadosVarejoDataSet1 projetosCriadosVarejoDataSet1;
         private System.Windows.Forms.BindingSource nomeProjetoBindingSource;
         private ProjetosCriadosVarejoDataSet1TableAdapters.NomeProjetoTableAdapter nomeProjetoTableAdapter;
-        private System.Windows.Forms.Button btConectarBanco;
         private System.Windows.Forms.Button btVoltar;
         private System.Windows.Forms.Button btCadastrarProjeto;
         private System.Windows.Forms.Label label2;
@@ -254,5 +295,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn iDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nomeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn criadorDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Button BtnLogin;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtUsuario;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox TxtSenha;
     }
 }

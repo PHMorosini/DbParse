@@ -59,6 +59,10 @@ namespace CriarPastaBancoNovo
             return nomeDaPasta;
         }
 
+        public static void CriarCaminhoPasta() 
+        {
+        
+        }
 
     }
 }

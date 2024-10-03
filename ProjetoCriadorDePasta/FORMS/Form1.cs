@@ -212,5 +212,10 @@ namespace ProjetoCriadorDePasta
             AbrirTela.Show();
             this.Hide();
         }
+
+        private void Welcome_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -44,6 +44,7 @@
             this.btChecarProjetos = new System.Windows.Forms.Button();
             this.btAbrirQuerry = new System.Windows.Forms.Button();
             this.btnStringConexão = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Welcome
@@ -54,8 +55,9 @@
             this.Welcome.Name = "Welcome";
             this.Welcome.Size = new System.Drawing.Size(270, 50);
             this.Welcome.TabIndex = 0;
-            this.Welcome.Text = "Mega complexo criador de pastas";
+            this.Welcome.Text = "Criação de diretorio";
             this.Welcome.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Welcome.Click += new System.EventHandler(this.Welcome_Click);
             // 
             // label1
             // 
@@ -207,7 +209,7 @@
             this.btAbrirQuerry.Name = "btAbrirQuerry";
             this.btAbrirQuerry.Size = new System.Drawing.Size(90, 46);
             this.btAbrirQuerry.TabIndex = 14;
-            this.btAbrirQuerry.Text = "Fazer Querry WEB";
+            this.btAbrirQuerry.Text = "QUERRY WEB";
             this.btAbrirQuerry.UseVisualStyleBackColor = false;
             this.btAbrirQuerry.Click += new System.EventHandler(this.btAbrirQuerry_Click);
             // 
@@ -222,6 +224,16 @@
             this.btnStringConexão.UseVisualStyleBackColor = false;
             this.btnStringConexão.Click += new System.EventHandler(this.btnStringConexão_Click);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(459, 162);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(90, 46);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "CAMINHO DIRETORIO";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
             // Tela
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -230,6 +242,7 @@
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.BackgroundImage = global::ProjetoCriadorDePasta.Properties.Resources.logo;
             this.ClientSize = new System.Drawing.Size(561, 391);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnStringConexão);
             this.Controls.Add(this.btAbrirQuerry);
             this.Controls.Add(this.btChecarProjetos);
@@ -272,6 +285,7 @@
         private System.Windows.Forms.Button btChecarProjetos;
         private System.Windows.Forms.Button btAbrirQuerry;
         private System.Windows.Forms.Button btnStringConexão;
+        private System.Windows.Forms.Button button1;
     }
 }
 

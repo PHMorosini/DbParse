@@ -34,26 +34,35 @@ namespace ProjetoCriadorDePasta
 
         private void btConectarBanco_Click(object sender, EventArgs e)
         {
-            try
-            {
-                using (SqlConnection cn = new SqlConnection(Conn.StrCon))
+            if (txtUsuario.Text == "EOBRAD" && TxtSenha.Text == "SONIC230") {
+                try
                 {
-                    cn.Open();
-                    MessageBox.Show("Conectado ao banco de dados");
-                    label1.Visible = true;
-                    dgTabela.Visible = true;
-                    btConectarBanco.Visible = false;
-                    btVoltar.Visible = true;
-                    btCadastrarProjeto.Visible = true;
-                    label2.Visible = true;
-                    btBuscar.Visible = true;
-                    txtNomeBusca.Visible = true;
+                    using (SqlConnection cn = new SqlConnection(Conn.StrCon))
+                    {
+                        cn.Open();
+                        MessageBox.Show("Conectado ao banco de dados");
+                        TxtSenha.Visible = false;
+                        txtUsuario.Visible = false;
+                        label1.Visible = true;
+                        dgTabela.Visible = true;
+                        BtnLogin.Visible = false;
+                        btVoltar.Visible = true;
+                        btCadastrarProjeto.Visible = true;
+                        label2.Visible = true;
+                        btBuscar.Visible = true;
+                        txtNomeBusca.Visible = true;
+                        label4.Visible = false;
+                        label3.Visible = false;
+                    }
+
                 }
-               
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Falha ao tentar conectar \n" + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Falha ao tentar conectar \n" + ex.Message);
+            else {
+                MessageBox.Show("Credenciais incorretas");          
             }
 
 
@@ -126,11 +135,6 @@ namespace ProjetoCriadorDePasta
                     MessageBox.Show("Falha ao fazer a busca \n" + ex.Message);
                 }
             }
-        }
-
-        private void txtNomeBusca_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
