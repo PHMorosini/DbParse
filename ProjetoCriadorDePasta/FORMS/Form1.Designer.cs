@@ -200,7 +200,6 @@
             this.btChecarProjetos.TabIndex = 13;
             this.btChecarProjetos.Text = "Checar projetos já criados";
             this.btChecarProjetos.UseVisualStyleBackColor = false;
-            this.btChecarProjetos.Visible = false;
             this.btChecarProjetos.Click += new System.EventHandler(this.btChecarProjetos_Click);
             // 
             // btAbrirQuerry
@@ -262,8 +261,6 @@
             this.Controls.Add(this.Welcome);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "Tela";
             this.Text = "Criador de pasta";
             this.Load += new System.EventHandler(this.Tela_Load);

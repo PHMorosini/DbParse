@@ -294,8 +294,6 @@
             this.Controls.Add(this.txtDiretorio);
             this.Controls.Add(this.btVoltar);
             this.Controls.Add(this.btConectarBanco);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "Form3";
             this.Text = "Querry WEB";
             this.Load += new System.EventHandler(this.Form3_Load);
