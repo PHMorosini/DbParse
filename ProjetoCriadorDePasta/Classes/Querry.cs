@@ -1477,7 +1477,7 @@ FROM ESTREL
 	case CODIGOTERCEIROPRODUTO.ATIVO when 'true' then 1 else 0 end
 FROM CODIGOTERCEIROPRODUTO
 WHERE CODIGOTERCEIROPRODUTO.ATIVO = 1
---AND CODIGOTERCEIROPRODUTO.CNPJCPF IN(SELECT CADFOR.CNPJ FROM CADFOR) /* Acrescentar essa clausula caso queira ignorar registros em que o CNPJ do Fornecedor nao existe na CADFOR */
+AND CODIGOTERCEIROPRODUTO.CNPJCPF IN(SELECT CADFOR.CNPJ FROM CADFOR) /* Acrescentar essa clausula caso queira ignorar registros em que o CNPJ do Fornecedor nao existe na CADFOR */
 ORDER BY CODIGOTERCEIROPRODUTO.CADPROID
 ";
 
