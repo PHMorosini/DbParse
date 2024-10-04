@@ -118,8 +118,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btPesquisaDiretorio);
             this.Controls.Add(this.txtDiretorio);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FormDirectoryPatch";
-            this.Text = "FormDirectoryPatch";
+            this.Text = "MigradorWEB";
+            this.Load += new System.EventHandler(this.FormDirectoryPatch_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

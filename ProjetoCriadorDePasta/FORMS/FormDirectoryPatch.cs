@@ -84,5 +84,10 @@ namespace ProjetoCriadorDePasta.FORMS
                 MessageBox.Show("Não foi possivel criar o arquivo de configuração, Erro:" + ex);
             }
         }
+
+        private void FormDirectoryPatch_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -261,9 +261,10 @@
             this.Controls.Add(this.Welcome);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Tela";
-            this.Text = "Criador de pasta";
-            this.Load += new System.EventHandler(this.Tela_Load);
+            this.Text = "MigradorWEB";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -187,8 +187,10 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtServer);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmStringBuilder";
-            this.Text = "FrmStringBuilder";
+            this.Text = "MigradorWEB";
             this.ResumeLayout(false);
             this.PerformLayout();
 

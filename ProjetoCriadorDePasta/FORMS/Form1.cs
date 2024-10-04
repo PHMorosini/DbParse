@@ -34,10 +34,6 @@ namespace ProjetoCriadorDePasta
         }
         }
 
-        private void Tela_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
@@ -242,5 +238,7 @@ namespace ProjetoCriadorDePasta
             FormDirectoryPatch Form = new FormDirectoryPatch();
             Form.Show();
         }
+
+       
     }
 }
