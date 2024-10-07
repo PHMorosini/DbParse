@@ -17,9 +17,12 @@ namespace ProjetoCriadorDePasta.FORMS
     public partial class Form3 : Form
     {
 
+        List<SqlConnection> conexoesAbertas = new List<SqlConnection>();
         public Form3()
         {
             InitializeComponent();
+            this.FormClosed += new FormClosedEventHandler(Form3_FormClosed);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -77,10 +80,11 @@ namespace ProjetoCriadorDePasta.FORMS
 
         private async void btGerarArquivos_Click(object sender, EventArgs e)
         {
+
             Querry minhaQuerry = new Querry();
             string folderPath = txtDiretorio.Text;
             string filialescolhida = txtFilial.Text;
-
+            
             minhaQuerry.CorrecoesBanco();
 
             try
@@ -242,6 +246,8 @@ namespace ProjetoCriadorDePasta.FORMS
                     }
 
                     MessageBox.Show("Arquivos gerados");
+                    FecharTodasConexoes();
+
                 }
                 else
                 {
@@ -289,6 +295,27 @@ namespace ProjetoCriadorDePasta.FORMS
         private void Form3_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void FecharTodasConexoes()
+        {
+            foreach (SqlConnection conn in conexoesAbertas)
+            {
+                if (conn != null && conn.State == System.Data.ConnectionState.Open)
+                {
+                    conn.Close();
+                    conn.Dispose();
+                    MessageBox.Show("Conexão fechada.");
+                }
+            }
+
+            // Limpa a lista de conexões
+            conexoesAbertas.Clear();
+        }
+
+        private void Form3_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit(); // Fecha o aplicativo completamente
         }
     }
 }

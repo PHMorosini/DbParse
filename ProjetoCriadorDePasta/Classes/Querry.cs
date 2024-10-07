@@ -235,7 +235,7 @@ ORDER BY PESSOA.ID ASC";
 	'|',
 	1
 FROM PESSOATELEFONE
-WHERE PESSOAID < 999999 and telefone <> ''
+WHERE PESSOAID < 999999 and telefone <> '' and tipotelefone <> '2'
 
 UNION ALL
 

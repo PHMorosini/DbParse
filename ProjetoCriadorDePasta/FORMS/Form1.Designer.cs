@@ -1,4 +1,6 @@
-﻿namespace ProjetoCriadorDePasta
+﻿using System.Windows.Forms;
+
+namespace ProjetoCriadorDePasta
 {
     partial class Tela
     {
@@ -187,7 +189,7 @@
             this.btCriarPasta.Name = "btCriarPasta";
             this.btCriarPasta.Size = new System.Drawing.Size(158, 50);
             this.btCriarPasta.TabIndex = 12;
-            this.btCriarPasta.Text = "CRIAR PASTA";
+            this.btCriarPasta.Text = "CRIAR DIRETORIO";
             this.btCriarPasta.UseVisualStyleBackColor = false;
             this.btCriarPasta.Click += new System.EventHandler(this.btCriarPasta_Click);
             // 
@@ -253,6 +255,7 @@
             this.MinimizeBox = false;
             this.Name = "Tela";
             this.Text = "MigradorWEB";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -21,6 +21,8 @@ namespace ProjetoCriadorDePasta
         string nomePastaPrincipal;
         public Tela()
         {
+            
+
             InitializeComponent();
              string jsonFilePath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "ConfiguracaoDiretorio.json");
         if (File.Exists(jsonFilePath))
@@ -239,6 +241,10 @@ namespace ProjetoCriadorDePasta
             Form.Show();
         }
 
-       
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit(); // Fecha o aplicativo completamente
+        }
+
     }
 }

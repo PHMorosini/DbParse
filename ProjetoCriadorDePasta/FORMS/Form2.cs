@@ -53,6 +53,7 @@ namespace ProjetoCriadorDePasta
                         txtNomeBusca.Visible = true;
                         label4.Visible = false;
                         label3.Visible = false;
+                        cn.Close();
                     }
 
                 }
