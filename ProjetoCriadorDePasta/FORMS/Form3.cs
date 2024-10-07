@@ -316,6 +316,7 @@ namespace ProjetoCriadorDePasta.FORMS
         private void Form3_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit(); // Fecha o aplicativo completamente
+            Application.ExitThread();
         }
     }
 }

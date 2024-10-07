@@ -244,6 +244,7 @@ namespace ProjetoCriadorDePasta
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit(); // Fecha o aplicativo completamente
+            Application.ExitThread();
         }
 
     }
