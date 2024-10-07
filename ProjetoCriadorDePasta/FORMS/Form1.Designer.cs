@@ -41,7 +41,6 @@
             this.rbAtual = new System.Windows.Forms.RadioButton();
             this.rbNewProject = new System.Windows.Forms.RadioButton();
             this.btCriarPasta = new System.Windows.Forms.Button();
-            this.btChecarProjetos = new System.Windows.Forms.Button();
             this.btAbrirQuerry = new System.Windows.Forms.Button();
             this.btnStringConexão = new System.Windows.Forms.Button();
             this.BtnCaminhoDiretorio = new System.Windows.Forms.Button();
@@ -81,13 +80,14 @@
             // 
             this.rbVarejo.BackColor = System.Drawing.Color.Transparent;
             this.rbVarejo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbVarejo.Location = new System.Drawing.Point(201, 138);
+            this.rbVarejo.Location = new System.Drawing.Point(267, 139);
             this.rbVarejo.Name = "rbVarejo";
             this.rbVarejo.Size = new System.Drawing.Size(80, 16);
             this.rbVarejo.TabIndex = 3;
             this.rbVarejo.TabStop = true;
             this.rbVarejo.Text = "VAREJO";
             this.rbVarejo.UseVisualStyleBackColor = false;
+            this.rbVarejo.Visible = false;
             this.rbVarejo.CheckedChanged += new System.EventHandler(this.rbVarejo_CheckedChanged);
             // 
             // label2
@@ -96,17 +96,17 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(-3, 135);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(198, 20);
+            this.label2.Size = new System.Drawing.Size(218, 20);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Pra onde vai ser migrado?";
+            this.label2.Text = "Para onde vai ser migrado?";
             // 
             // rbWEB
             // 
             this.rbWEB.BackColor = System.Drawing.Color.Transparent;
             this.rbWEB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbWEB.Location = new System.Drawing.Point(270, 138);
+            this.rbWEB.Location = new System.Drawing.Point(208, 139);
             this.rbWEB.Name = "rbWEB";
-            this.rbWEB.Size = new System.Drawing.Size(80, 16);
+            this.rbWEB.Size = new System.Drawing.Size(53, 16);
             this.rbWEB.TabIndex = 5;
             this.rbWEB.TabStop = true;
             this.rbWEB.Text = "WEB";
@@ -191,17 +191,6 @@
             this.btCriarPasta.UseVisualStyleBackColor = false;
             this.btCriarPasta.Click += new System.EventHandler(this.btCriarPasta_Click);
             // 
-            // btChecarProjetos
-            // 
-            this.btChecarProjetos.BackColor = System.Drawing.Color.White;
-            this.btChecarProjetos.Location = new System.Drawing.Point(459, 333);
-            this.btChecarProjetos.Name = "btChecarProjetos";
-            this.btChecarProjetos.Size = new System.Drawing.Size(90, 46);
-            this.btChecarProjetos.TabIndex = 13;
-            this.btChecarProjetos.Text = "Checar projetos já criados";
-            this.btChecarProjetos.UseVisualStyleBackColor = false;
-            this.btChecarProjetos.Click += new System.EventHandler(this.btChecarProjetos_Click);
-            // 
             // btAbrirQuerry
             // 
             this.btAbrirQuerry.BackColor = System.Drawing.Color.White;
@@ -246,7 +235,6 @@
             this.Controls.Add(this.BtnCaminhoDiretorio);
             this.Controls.Add(this.btnStringConexão);
             this.Controls.Add(this.btAbrirQuerry);
-            this.Controls.Add(this.btChecarProjetos);
             this.Controls.Add(this.btCriarPasta);
             this.Controls.Add(this.rbNewProject);
             this.Controls.Add(this.rbAtual);
@@ -284,7 +272,6 @@
         private System.Windows.Forms.RadioButton rbAtual;
         private System.Windows.Forms.RadioButton rbNewProject;
         private System.Windows.Forms.Button btCriarPasta;
-        private System.Windows.Forms.Button btChecarProjetos;
         private System.Windows.Forms.Button btAbrirQuerry;
         private System.Windows.Forms.Button btnStringConexão;
         private System.Windows.Forms.Button BtnCaminhoDiretorio;

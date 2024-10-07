@@ -157,14 +157,14 @@ namespace ProjetoCriadorDePasta
 
         private void rbVarejo_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbVarejo.Checked)
-            {
-                label4.Visible = true;
-                rbUniplus.Visible = true;
-                rbAtual.Visible = true;
-                rbAlterData.Visible = true;
-                rbNewProject.Visible = true;
-            }
+            //if (rbVarejo.Checked)
+            //{
+            //    label4.Visible = true;
+            //    rbUniplus.Visible = true;
+            //    rbAtual.Visible = true;
+            //    rbAlterData.Visible = true;
+            //    rbNewProject.Visible = true;
+            //}
         }
 
         private void rbUniplus_CheckedChanged(object sender, EventArgs e)

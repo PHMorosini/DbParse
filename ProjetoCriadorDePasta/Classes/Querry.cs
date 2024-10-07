@@ -119,6 +119,7 @@ WHERE PESSOA.ID < 999999 ";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
                     
                 }
             }
@@ -198,7 +199,8 @@ ORDER BY PESSOA.ID ASC";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -264,7 +266,8 @@ where celular <> 'NULL' and celular <> ''
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -316,7 +319,8 @@ ORDER BY PESSOAID ASC
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -416,7 +420,8 @@ WHERE PESSOA.ID > 1000000 AND PESSOA.ID <= 2000000";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -490,7 +495,8 @@ WHERE PESSOA.ID >= 1000000 AND PESSOA.ID < 2000000";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -558,7 +564,8 @@ where contato_celular <> 'NULL' and contato_celular <> ''
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -609,7 +616,8 @@ ORDER BY PESSOAID ASC";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -662,7 +670,8 @@ WHERE CONTATO <> '' AND CONTATO IS NOT NULL
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -710,6 +719,7 @@ resultStringBuilder.AppendLine(); // Nova linha para cada registro
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -757,7 +767,8 @@ FROM NCMFISCAL";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -804,7 +815,8 @@ FROM CESTFISCAL_NCMFISCAL";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                   
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -853,7 +865,8 @@ FROM CADMKP";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -902,7 +915,8 @@ FROM UNIDADEPRODUTO
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -950,7 +964,8 @@ ORDER BY ID ASC";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-                    
+                    cn.Close();
+
                 }
             }
             catch (Exception ex)
@@ -1114,6 +1129,7 @@ ORDER BY SEQ ASC";
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1162,6 +1178,7 @@ ORDER BY COUNT(*) DESC
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1258,6 +1275,7 @@ WHERE CADPRO.ID > 1
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1329,6 +1347,7 @@ WHERE CADPRO.ID > 1
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1391,6 +1410,7 @@ ORDER BY PRODUTOID ASC
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1444,6 +1464,7 @@ FROM ESTREL
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1496,6 +1517,7 @@ ORDER BY CODIGOTERCEIROPRODUTO.CADPROID
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1579,6 +1601,7 @@ WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1662,6 +1685,7 @@ WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) AND CASE COALESCE(FORDOC.U
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1726,6 +1750,7 @@ ORDER BY PRODUTOID ASC
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1803,6 +1828,7 @@ ORDER BY PRODUTOID ASC
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -1866,7 +1892,7 @@ ORDER BY PRODUTOID ASC
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
-
+                    cn.Close();
                 }
             }
             catch (Exception ex)
@@ -1950,6 +1976,7 @@ WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1 and c
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
@@ -2034,6 +2061,7 @@ WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) and fordoc.filial = @filia
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
 
                 }
             }
