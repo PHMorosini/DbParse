@@ -2048,7 +2048,200 @@ WHERE FORDOC.VR_PARCELA > COALESCE(FORDOC.VR_PAGO, 0) and fordoc.filial = @filia
                     SqlCommand command = new SqlCommand(query, cn);
                     command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
                     SqlDataReader reader = command.ExecuteReader();
-                    
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        //metodo replicar saldo filial 2
+
+        public void GradeProdutoReplicarFilial1(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT 
+	CADPRO.ID AS PRODUTOID, 
+	'|',
+	1,
+	'|',
+	CASE
+		WHEN LEN(LTRIM(RTRIM(GRADE))) > 0
+			THEN LTRIM(RTRIM(GRADE))
+		ELSE 'U'
+	END AS GRADE,
+	'|',
+	ESTGRA.ESTOQUEFISICO AS QUANTIDADE,
+	'|',
+	case ESTGRA.ATIVO when 'true' then 1 else 0 end
+FROM CADPRO
+JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+JOIN ESTGRA ON ESTGRA.IDESTSAL = ESTSAL.ID
+WHERE CADPRO.ID > 1 and estsal.filial = 1
+
+union all
+
+SELECT 
+	CADPRO.ID AS PRODUTOID, 
+	'|',
+	2,
+	'|',
+	CASE
+		WHEN LEN(LTRIM(RTRIM(GRADE))) > 0
+			THEN LTRIM(RTRIM(GRADE))
+		ELSE 'U'
+	END AS GRADE,
+	'|',
+	ESTGRA.ESTOQUEFISICO AS QUANTIDADE,
+	'|',
+	case ESTGRA.ATIVO when 'true' then 1 else 0 end
+FROM CADPRO
+JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+JOIN ESTGRA ON ESTGRA.IDESTSAL = ESTSAL.ID
+WHERE CADPRO.ID > 1 and estsal.filial = 1
+
+";
+
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        public void SaldoReplicarFilial1(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT 
+	CADPRO.ID,
+	'|',
+	1,
+	'|',
+	1 AS TABELAPRECO,
+	'|',
+	NULL, --TABELAMARKUP.CODIGOMARKUP AS MARKUP,
+	'|',
+	COALESCE(ESTSAL.VRVENDAV, 0),
+	'|',
+	COALESCE(ESTSAL.VRCOMPRAV, 0),
+	'|',
+	COALESCE(ESTSAL.VRCUSTOV, 0),
+	'|',
+	COALESCE(ESTSAL.VRZEROV, 0),
+	'|',
+	COALESCE(ESTSAL.VRMEDIOV, 0),
+	'|',
+	COALESCE(ESTSAL.LUCROV, 0),
+	'|',
+	case ESTSAL.ATIVO when 'true' then 1 else 0 end
+ FROM CADPRO
+ JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+ LEFT JOIN (
+	SELECT
+	ROW_NUMBER() OVER(ORDER BY DATA) + 1 AS CODIGOMARKUP /* Markup 1 ja existe no banco da web */, CADMKP.ID, CADMKP.NOME, CADMKP.PERCENTUAL, CADMKP.ATIVO FROM CADMKP
+ ) AS TABELAMARKUP ON TABELAMARKUP.ID = ESTSAL.IDCADMKP
+ WHERE CADPRO.ID > 1 and estsal.filial = 1
+ 
+union all 
+
+SELECT 
+	CADPRO.ID,
+	'|',
+	2,
+	'|',
+	1 AS TABELAPRECO,
+	'|',
+	NULL, --TABELAMARKUP.CODIGOMARKUP AS MARKUP,
+	'|',
+	COALESCE(ESTSAL.VRVENDAV, 0),
+	'|',
+	COALESCE(ESTSAL.VRCOMPRAV, 0),
+	'|',
+	COALESCE(ESTSAL.VRCUSTOV, 0),
+	'|',
+	COALESCE(ESTSAL.VRZEROV, 0),
+	'|',
+	COALESCE(ESTSAL.VRMEDIOV, 0),
+	'|',
+	COALESCE(ESTSAL.LUCROV, 0),
+	'|',
+	case ESTSAL.ATIVO when 'true' then 1 else 0 end
+ FROM CADPRO
+ JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
+ LEFT JOIN (
+	SELECT
+	ROW_NUMBER() OVER(ORDER BY DATA) + 1 AS CODIGOMARKUP /* Markup 1 ja existe no banco da web */, CADMKP.ID, CADMKP.NOME, CADMKP.PERCENTUAL, CADMKP.ATIVO FROM CADMKP
+ ) AS TABELAMARKUP ON TABELAMARKUP.ID = ESTSAL.IDCADMKP
+ WHERE CADPRO.ID > 1 and estsal.filial = 1
+";
+
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
                     StringBuilder resultStringBuilder = new StringBuilder();
 
                     while (reader.Read())

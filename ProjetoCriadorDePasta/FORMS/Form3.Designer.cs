@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btPesquisaDiretorio = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbReplicarEstoque = new System.Windows.Forms.CheckBox();
             this.cbFilial2 = new System.Windows.Forms.CheckBox();
             this.cbFilial1 = new System.Windows.Forms.CheckBox();
             this.cbSaldoZerado = new System.Windows.Forms.CheckBox();
@@ -110,6 +111,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel1.Controls.Add(this.cbReplicarEstoque);
             this.panel1.Controls.Add(this.cbFilial2);
             this.panel1.Controls.Add(this.cbFilial1);
             this.panel1.Controls.Add(this.cbSaldoZerado);
@@ -118,8 +120,19 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Location = new System.Drawing.Point(240, 64);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(182, 159);
+            this.panel1.Size = new System.Drawing.Size(196, 192);
             this.panel1.TabIndex = 8;
+            // 
+            // cbReplicarEstoque
+            // 
+            this.cbReplicarEstoque.AutoSize = true;
+            this.cbReplicarEstoque.Location = new System.Drawing.Point(16, 111);
+            this.cbReplicarEstoque.Name = "cbReplicarEstoque";
+            this.cbReplicarEstoque.Size = new System.Drawing.Size(168, 17);
+            this.cbReplicarEstoque.TabIndex = 14;
+            this.cbReplicarEstoque.Text = "Replicar estoque para a filial 2";
+            this.cbReplicarEstoque.UseVisualStyleBackColor = true;
+            this.cbReplicarEstoque.CheckedChanged += new System.EventHandler(this.cbReplicarEstoque_CheckedChanged);
             // 
             // cbFilial2
             // 
@@ -152,12 +165,13 @@
             this.cbSaldoZerado.TabIndex = 11;
             this.cbSaldoZerado.Text = "Saldo zerado";
             this.cbSaldoZerado.UseVisualStyleBackColor = true;
+            this.cbSaldoZerado.CheckedChanged += new System.EventHandler(this.cbSaldoZerado_CheckedChanged);
             // 
             // label3
             // 
             this.label3.BackColor = System.Drawing.Color.Gainsboro;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(20, 111);
+            this.label3.Location = new System.Drawing.Point(20, 139);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 15);
             this.label3.TabIndex = 10;
@@ -165,7 +179,7 @@
             // 
             // txtFilial
             // 
-            this.txtFilial.Location = new System.Drawing.Point(99, 111);
+            this.txtFilial.Location = new System.Drawing.Point(99, 139);
             this.txtFilial.Name = "txtFilial";
             this.txtFilial.Size = new System.Drawing.Size(70, 20);
             this.txtFilial.TabIndex = 10;
@@ -175,7 +189,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(51, 5);
+            this.label2.Location = new System.Drawing.Point(40, 14);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(118, 22);
             this.label2.TabIndex = 3;
@@ -258,7 +272,6 @@
             this.cbClidoc.TabIndex = 17;
             this.cbClidoc.Text = "CLIDOC";
             this.cbClidoc.UseVisualStyleBackColor = true;
-            this.cbClidoc.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
             // 
             // cbCodbar
             // 
@@ -294,9 +307,11 @@
             this.Controls.Add(this.txtDiretorio);
             this.Controls.Add(this.btVoltar);
             this.Controls.Add(this.btConectarBanco);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form3";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "MigradorWEB";
             this.Load += new System.EventHandler(this.Form3_Load);
             this.panel1.ResumeLayout(false);
@@ -331,5 +346,6 @@
         private System.Windows.Forms.CheckBox cbCodbar;
         private System.Windows.Forms.CheckBox cbProduto;
         private System.Windows.Forms.CheckBox cbFordoc;
+        private System.Windows.Forms.CheckBox cbReplicarEstoque;
     }
 }

@@ -34,6 +34,7 @@ namespace ProjetoCriadorDePasta.FORMS
                 {
                     cn.Open();
                     MessageBox.Show("Conectado ao banco de dados");
+                    cn.Close();
                 }
 
             }
@@ -166,6 +167,10 @@ namespace ProjetoCriadorDePasta.FORMS
                         {
                             await Task.Run(() => minhaQuerry.Saldo(saldo, filialescolhida));
                         }
+                        else if(cbReplicarEstoque.Checked)
+                        {
+                            await Task.Run(() => minhaQuerry.SaldoReplicarFilial1(saldo));
+                        }
                         else
                         {
                             await Task.Run(() => minhaQuerry.Saldo(saldo));
@@ -186,6 +191,10 @@ namespace ProjetoCriadorDePasta.FORMS
                         else if (txtFilial.Text.Length > 0)
                         {
                             await Task.Run(() => minhaQuerry.GradeProduto(gradeproduto, filialescolhida));
+                        }
+                        else  if (cbReplicarEstoque.Checked)
+                        {
+                            await Task.Run(() => minhaQuerry.GradeProdutoReplicarFilial1(gradeproduto));
                         }
                         else
                         {
@@ -266,30 +275,20 @@ namespace ProjetoCriadorDePasta.FORMS
 
         private void cbFilial2_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbFilial2.Checked) { txtFilial.ReadOnly = true; cbFilial1.Checked = false; } 
+            if (cbFilial2.Checked) { txtFilial.ReadOnly = true; cbFilial1.Checked = false; cbReplicarEstoque.Checked = false; cbSaldoZerado.Checked = false; } 
             DesbloquearTextBoxFilial();
         }
 
         private void cbFilial1_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbFilial1.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false; } 
+            if (cbFilial1.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false; cbReplicarEstoque.Checked = false;cbSaldoZerado.Checked = false; } 
             DesbloquearTextBoxFilial();
 
         }
 
         private void DesbloquearTextBoxFilial() 
         {
-            if (cbFilial1.Checked == false && cbFilial2.Checked == false) { txtFilial.ReadOnly = false; }
-        }
-
-        private void checkBox24_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox5_CheckedChanged(object sender, EventArgs e)
-        {
-
+            if (cbFilial1.Checked == false && cbFilial2.Checked == false && cbReplicarEstoque.Checked == false && cbSaldoZerado.Checked == false) { txtFilial.ReadOnly = false; }
         }
 
         private void Form3_Load(object sender, EventArgs e)
@@ -317,6 +316,18 @@ namespace ProjetoCriadorDePasta.FORMS
         {
             Application.Exit(); // Fecha o aplicativo completamente
             Application.ExitThread();
+        }
+
+        private void cbReplicarEstoque_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbReplicarEstoque.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false;cbFilial1.Checked = false; cbSaldoZerado.Checked = false; }
+            DesbloquearTextBoxFilial();
+        }
+
+        private void cbSaldoZerado_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbSaldoZerado.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false; cbFilial1.Checked = false; cbReplicarEstoque.Checked = false; }
+            DesbloquearTextBoxFilial();
         }
     }
 }
