@@ -988,8 +988,7 @@ ORDER BY ID ASC";
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = @"
-                   ----- ====== CRIA GRUPOS PADROES ====== ----
+                    string query = @"----- ====== CRIA GRUPOS PADROES ====== ----
 IF NOT EXISTS(SELECT [dbo].[ESTGRU].[ID] FROM [dbo].[ESTGRU] WHERE [dbo].[ESTGRU].[ID] = '99')
 BEGIN
 	INSERT INTO [dbo].[ESTGRU]
@@ -1203,7 +1202,7 @@ ORDER BY COUNT(*) DESC
                 {
                     cn.Open();
                     string query = @"SELECT
-	CADPRO.ID,
+	case when CADPRO.ID = 1 then (select max(id) + 1 from CADPRO) else cadpro.id end,
 	'|',
 	CADPRO.DESCRICAO,
 	'|',
@@ -1246,15 +1245,19 @@ ORDER BY COUNT(*) DESC
 	'|',
 	CADPRO.ANPFISCALID,
 	'|',	
-	ESTGRU.DESCRICAO,
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+COALESCE(estgru.descricao, '')
+,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
 	'|',
-	CADPRO.MARCA,
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+COALESCE(CADPRO.MARCA, '')
+,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
 	'|',
 	CADPRO.GENEROFISCALID,
 	'|',
 	CADPRO.EXTIPIFISCALID,
 	'|',
-	case CADPRO.ATIVO when 'true' then 1 else 0 end
+	case cadpro.ATIVO when 'true' then 1 else 0 end
 FROM CADPRO
 JOIN ESTGRU ON ESTGRU.ID = CADPRO.GRUPO
 WHERE CADPRO.ID > 1
