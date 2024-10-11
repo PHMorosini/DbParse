@@ -62,10 +62,7 @@ namespace CriarPastaBancoNovo
            
         }
 
-        public static void CriarCaminhoPasta() 
-        {
         
-        }
 
     }
 }
