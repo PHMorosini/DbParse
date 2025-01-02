@@ -89,7 +89,6 @@ namespace ProjetoCriadorDePasta
             this.rbVarejo.TabStop = true;
             this.rbVarejo.Text = "VAREJO";
             this.rbVarejo.UseVisualStyleBackColor = false;
-            this.rbVarejo.Visible = false;
             this.rbVarejo.CheckedChanged += new System.EventHandler(this.rbVarejo_CheckedChanged);
             // 
             // label2
@@ -124,7 +123,6 @@ namespace ProjetoCriadorDePasta
             this.label4.Size = new System.Drawing.Size(291, 20);
             this.label4.TabIndex = 7;
             this.label4.Text = "Selecione o software original do banco:";
-            this.label4.Visible = false;
             // 
             // rbAlterData
             // 
@@ -137,7 +135,6 @@ namespace ProjetoCriadorDePasta
             this.rbAlterData.TabStop = true;
             this.rbAlterData.Text = "ALTERDATA";
             this.rbAlterData.UseVisualStyleBackColor = false;
-            this.rbAlterData.Visible = false;
             this.rbAlterData.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // rbUniplus
@@ -151,7 +148,6 @@ namespace ProjetoCriadorDePasta
             this.rbUniplus.TabStop = true;
             this.rbUniplus.Text = "UNIPLUS";
             this.rbUniplus.UseVisualStyleBackColor = false;
-            this.rbUniplus.Visible = false;
             this.rbUniplus.CheckedChanged += new System.EventHandler(this.rbUniplus_CheckedChanged);
             // 
             // rbAtual
@@ -165,7 +161,6 @@ namespace ProjetoCriadorDePasta
             this.rbAtual.TabStop = true;
             this.rbAtual.Text = "ATUAL SISTEMAS";
             this.rbAtual.UseVisualStyleBackColor = false;
-            this.rbAtual.Visible = false;
             this.rbAtual.CheckedChanged += new System.EventHandler(this.rbAtual_CheckedChanged);
             // 
             // rbNewProject
@@ -179,7 +174,6 @@ namespace ProjetoCriadorDePasta
             this.rbNewProject.TabStop = true;
             this.rbNewProject.Text = "PROJETO NOVO";
             this.rbNewProject.UseVisualStyleBackColor = false;
-            this.rbNewProject.Visible = false;
             this.rbNewProject.CheckedChanged += new System.EventHandler(this.rbNewProject_CheckedChanged);
             // 
             // btCriarPasta
