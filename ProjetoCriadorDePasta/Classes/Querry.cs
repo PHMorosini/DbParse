@@ -228,10 +228,12 @@ ORDER BY PESSOA.ID ASC";
                     string query = @"SELECT
 	PESSOAID,
 	'|',
-	case TIPOTELEFONE
-	when  9 then 3
-	else TIPOTELEFONE 
-	end as telefone,
+	CASE PESSOATELEFONE.TIPOTELEFONE
+		WHEN '1' THEN 1
+		WHEN '2' THEN 2
+		WHEN '9' THEN 3
+		ELSE 3
+	END,
 	'|',
 	TELEFONE,
 	'|',
@@ -524,10 +526,12 @@ WHERE PESSOA.ID >= 1000000 AND PESSOA.ID < 2000000";
                     string query = @"SELECT
 	PESSOAID - 1000000,
 	'|',
-	case TIPOTELEFONE
-	when  9 then 2
-	else TIPOTELEFONE 
-	end as telefone,
+	CASE PESSOATELEFONE.TIPOTELEFONE
+		WHEN '1' THEN 1
+		WHEN '2' THEN 2
+		WHEN '9' THEN 3
+		ELSE 3
+	END,
 	'|',
 	TELEFONE,
 	'|',
