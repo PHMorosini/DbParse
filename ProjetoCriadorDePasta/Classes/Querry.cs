@@ -13,7 +13,7 @@ namespace ProjetoCriadorDePasta.Classes
 {
     public class Querry
     {
-        public void CorrecoesBanco() 
+        public void CorrecoesBanco()
         {
             try
             {
@@ -26,18 +26,18 @@ namespace ProjetoCriadorDePasta.Classes
                         "update NCMFISCAL set descricao = 'migrado' where descricao =''";
                     SqlCommand command = new SqlCommand(update, cn)
                     { CommandTimeout = 600 };
-                    command.ExecuteNonQuery();                                              
+                    command.ExecuteNonQuery();
                     cn.Close();
                     MessageBox.Show("Correções feitas no banco, prosseguindo com a extração dos dados...");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Não foi possivel realizar as correções no banco, Erro:" + ex.Message);
             }
         }
 
-        public void SituacaoCliente(string LocalDiretorio) 
+        public void SituacaoCliente(string LocalDiretorio)
         {
             try
             {
@@ -51,7 +51,23 @@ namespace ProjetoCriadorDePasta.Classes
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = "";
+                    string query = @" 
+                        SELECT
+	                    SITUACAO,					-- Id
+	                    '|',				   
+	                    DESCRICAO,					-- Nome
+	                    '|',				   
+	                    CASE ESPECIAL WHEN 'S' THEN 1 ELSE 0 END,					-- Especial
+	                    '|',				   
+	                    CASE ATU_CADASTRO WHEN 'S' THEN 1 ELSE 0 END,					-- AtualizarCadastro
+	                    '|',				   
+	                    CASE EXIGE_SENHA WHEN 'S' THEN 1 ELSE 0 END,					-- ExigeSenha
+	                    '|',				   
+	                    CASE BLOQUEAR WHEN 'S' THEN 1 ELSE 0 END,					-- Bloquear
+	                    '|',				   
+	                    1					-- Ativo	
+                    FROM CADSIT -- Tabela
+                    ";
                     SqlCommand command = new SqlCommand(query, cn)
                     {
                         CommandTimeout = 600
@@ -80,7 +96,116 @@ namespace ProjetoCriadorDePasta.Classes
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
+        public void TipoCliente(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @" 
+                       SELECT
+	                    CODIGO,					-- Id
+	                    '|',				   
+	                    DESCRICAO				-- Descricao				   
+                    FROM TABELA 
+                    WHERE TIPO = 'CADCLI.TIPO' 
+                    ";
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void Usuario(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @" 
+                       SELECT
+	                    ID + 2,					-- Id
+	                    '|',				   
+	                    nome,					-- Nome
+	                    '|',				   
+	                    login,					-- Login
+	                    '|',				   
+	                    hora_entrada,					-- Hora Entrada
+	                    '|',				   
+	                    hora_saida,					-- Hora Saida
+	                    '|',				   
+	                    e_mail,					-- E-mail
+	                    '|',				   
+	                   case ativo when 'true' then 1 else 0 end					-- Ativo
+                    FROM CADFUN-- Tabela
+                    WHERE ID NOT IN ('999998','999999')
+                    ";
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
 
         public void Cliente(string LocalDiretorio)
         {
@@ -144,14 +269,105 @@ COALESCE(PESSOA.PSEUDONIMO, '')
     ELSE 0 
      END AS ATIVO,
 	'|',
-    1
+    COALESCE((SELECT FILIAL FROM CADCLI WHERE CADCLI.CLIENTE = PESSOA.ID),(SELECT TOP 1 ID FROM CADFIL WHERE ATIVO = 1 ORDER BY ID ASC)),
+	'|',				   
+	coalesce(cadcli.IDENTIDADE,''),					-- Identidade
+	'|',				   
+	coalesce(CADCLI.ORGAOIDENTIDADE,''), -- Orgao expeditor
+	'|',					   
+CASE CAST(COALESCE(UFIDENTIDADE, '') AS VARCHAR)
+    WHEN 'RO' THEN '11'
+    WHEN 'AC' THEN '12'
+    WHEN 'AM' THEN '13'
+    WHEN 'RR' THEN '14'
+    WHEN 'PA' THEN '15'
+    WHEN 'AP' THEN '16'
+    WHEN 'TO' THEN '17'
+    WHEN 'MA' THEN '21'
+    WHEN 'PI' THEN '22'
+    WHEN 'CE' THEN '23'
+    WHEN 'RN' THEN '24'
+    WHEN 'PB' THEN '25'
+    WHEN 'PE' THEN '26'
+    WHEN 'AL' THEN '27'
+    WHEN 'SE' THEN '28'
+    WHEN 'BA' THEN '29'
+    WHEN 'MG' THEN '31'
+    WHEN 'ES' THEN '32'
+    WHEN 'RJ' THEN '33'
+    WHEN 'SP' THEN '35'
+    WHEN 'PR' THEN '41'
+    WHEN 'SC' THEN '42'
+    WHEN 'RS' THEN '43'
+    WHEN 'MS' THEN '50'
+    WHEN 'MT' THEN '51'
+    WHEN 'GO' THEN '52'
+    WHEN 'DF' THEN '53'
+    WHEN 'EX' THEN '99'
+    ELSE ''
+END AS id_estado,	-- UF identidade
+	'|',				   
+	coalesce(CONVERT(VARCHAR(10), dtabertura, 103),''),	-- Data Abertura	
+	'|',				   
+	coalesce(pai,''),					-- Pai
+	'|',				   
+	coalesce(mae,''),					-- Mae
+	'|',				   
+	coalesce(natural,''),					-- Naturalidade	
+	'|',				   
+	CASE CAST(sexo AS varchar)
+  WHEN 'M' THEN 1
+  WHEN 'F' THEN 2
+  WHEN 'O' THEN 3
+  ELSE NULL
+END,					-- Sexo
+	'|',		   
+	COALESCE(LIMITE_CREDITO,'0'),					-- Limite credito
+	'|',				   
+	COALESCE(LIMITE_DEBITO,'0'),					-- Limite debito	
+	'|',				   
+	COALESCE(vencimento,'0'),					-- Dias para vencimento
+	'|',				   
+	COALESCE(DESC_MATERIAL,'0'),				-- Desconto para produto
+	'|',				   
+	COALESCE(DESC_SERVICO,'0'),					-- Desconto para serviço	
+	'|',				   
+	COALESCE(vr_mensal,'0'),					-- Valor mensal
+	'|',					   
+	   CASE ESTADOCIVIL WHEN 'O' THEN 5
+   WHEN 'S' THEN 1
+   WHEN 'C' THEN 2
+   WHEN 'P' THEN 5
+   WHEN 'D' THEN 3
+   WHEN 'V' THEN 4
+   ELSE 5 END,					-- Estado civil
+	'|',				   
+	COALESCE(situacao,1),					-- Situacaoid	
+	'|',				   
+	coalesce(CONVERT(VARCHAR(10), dtsituacao, 103),''),					-- Datasituacao
+	'|',				   
+	case coalesce(cast(vendedor as varchar),'') when '0' then '' else coalesce(cast(vendedor + 2 as varchar),'') end,					-- VendedorID
+	'|',				   
+	COALESCE(tipo,''),					-- TipoclienteId	
+	'|',				   
+	COALESCE(grade,''),					-- ComplementoGrade
+	'|'	,				   
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+COALESCE(cadcli.alerta, '')
+,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),				-- Alerta	
+	'|'	,	
+	case cast(tipovencimento as varchar) when '0' then '1'
+	when '1' then '2'
+	else '0' end as tipovencimento
 FROM PESSOA
 LEFT JOIN CONTRIBUINTE ON CONTRIBUINTE.ID = PESSOA.CONTRIBUINTEID
-left join CADCLI on CADCLI.NOME = PESSOA.NOME
-WHERE PESSOA.ID < 999999 ";
+left join CADCLI on CADCLI.CLIENTE = PESSOA.ID
+WHERE PESSOA.ID < 999999";
 
-                    SqlCommand command = new SqlCommand(query, cn) {
-                        CommandTimeout = 600 };
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
                     SqlDataReader reader = command.ExecuteReader();
 
                     StringBuilder resultStringBuilder = new StringBuilder();
@@ -167,7 +383,7 @@ WHERE PESSOA.ID < 999999 ";
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
                     cn.Close();
-                    
+
                 }
             }
             catch (Exception ex)
@@ -378,6 +594,79 @@ ORDER BY PESSOAID ASC
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
+        public void Cliente_DependenteConjuge(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"
+                  SELECT
+	                id,					-- ClienteId
+	                '|',				   
+	                2,					-- Tipo
+	                '|',				   
+	                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                COALESCE(nome, '')
+                ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),					-- Nome
+	                '|',				   
+	                coalesce(CONVERT(VARCHAR(10), datanascimento, 103),''),					-- DataNascimento
+	                '|',			   
+	                ''					-- Observacao
+                FROM PESSOACONJUGE-- Tabela
+                where nome <> '' and nome is not null
+
+                union all
+
+                SELECT
+	                pessoaid,					-- ClienteId
+	                '|',				   
+	                3,					-- Tipo
+	                '|',				   
+	                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                COALESCE(nome, '')
+                ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),					-- Nome
+	                '|',				   
+	                coalesce(CONVERT(VARCHAR(10), datanascimento, 103),''),					-- DataNascimento
+	                '|',				   
+	                ''					-- Observacao
+                FROM PESSOADEPENDENTE-- Tabela
+                where pessoaid is not null and nome <> '' and nome is not null
+                    ";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
         /////////
         public void Fornecedor(string LocalDiretorio)
         {
@@ -553,7 +842,7 @@ WHERE PESSOA.ID >= 1000000 AND PESSOA.ID < 2000000";
                 Console.WriteLine("Erro: " + ex.Message);
                 MessageBox.Show("Erro: " + ex.Message);
             }
-                    }
+        }
         public void Fornecedor_Telefone(string LocalDiretorio)
         {
             try
@@ -732,7 +1021,7 @@ WHERE CONTATO <> '' AND CONTATO IS NOT NULL
             }
         }
         //////////
-       public void cest(string LocalDiretorio)
+        public void cest(string LocalDiretorio)
         {
             try
             {
@@ -755,18 +1044,18 @@ WHERE CONTATO <> '' AND CONTATO IS NOT NULL
 	case CESTFISCAL.ATIVO when 'TRUE' then 1 else 0 end
 FROM CESTFISCAL";
 
-    SqlCommand command = new SqlCommand(query, cn);
-    SqlDataReader reader = command.ExecuteReader();
+                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlDataReader reader = command.ExecuteReader();
 
-    StringBuilder resultStringBuilder = new StringBuilder();
+                    StringBuilder resultStringBuilder = new StringBuilder();
 
                     while (reader.Read())
                     {
-                        for (int i = 0; i<reader.FieldCount; i++)
+                        for (int i = 0; i < reader.FieldCount; i++)
                         {
                             resultStringBuilder.Append(reader[i].ToString());
                         }
-resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
                     }
 
                     File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
@@ -777,10 +1066,10 @@ resultStringBuilder.AppendLine(); // Nova linha para cada registro
             catch (Exception ex)
             {
                 Console.WriteLine("Erro: " + ex.Message);
-MessageBox.Show("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void ncm(string LocalDiretorio)
+        public void ncm(string LocalDiretorio)
         {
             try
             {
@@ -828,7 +1117,7 @@ FROM NCMFISCAL";
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void cestxncm(string LocalDiretorio)
+        public void cestxncm(string LocalDiretorio)
         {
             try
             {
@@ -876,7 +1165,7 @@ FROM CESTFISCAL_NCMFISCAL";
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void markup(string LocalDiretorio)
+        public void markup(string LocalDiretorio)
         {
             try
             {
@@ -926,7 +1215,7 @@ FROM CADMKP";
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Unidade(string LocalDiretorio)
+        public void Unidade(string LocalDiretorio)
         {
             try
             {
@@ -976,7 +1265,7 @@ FROM UNIDADEPRODUTO
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Marca(string LocalDiretorio)
+        public void Marca(string LocalDiretorio)
         {
             try
             {
@@ -1025,7 +1314,7 @@ ORDER BY ID ASC";
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Grupo(string LocalDiretorio)
+        public void Grupo(string LocalDiretorio)
         {
             try
             {
@@ -1189,7 +1478,7 @@ ORDER BY SEQ ASC";
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Grades(string LocalDiretorio)
+        public void Grades(string LocalDiretorio)
         {
             try
             {
@@ -1238,7 +1527,7 @@ ORDER BY COUNT(*) DESC
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Produto(string LocalDiretorio)
+        public void Localizacao(string LocalDiretorio)
         {
             try
             {
@@ -1252,67 +1541,10 @@ ORDER BY COUNT(*) DESC
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = @"SELECT
-	case when CADPRO.ID = 1 then (select max(id) + 1 from CADPRO) else cadpro.id end,
-	'|',
-	CADPRO.DESCRICAO,
-	'|',
-	CADPRO.REFERENCIA,
-	'|',
-	CADPRO.CODIGO_BARRA,
-	'|',
-	CADPRO.PESOV,
-	'|',
-	CADPRO.VOLUME,
-	'|',
-	CASE WHEN CSTICMSID = '060' THEN '0500'
-		 WHEN CSTICMSID = '000' THEN '0102'
-		 ELSE '0102'
-	END,
-	'|',
-	0 AS MONOFASICO,
-	'|',
-	0 AS COMBUSTIVEL,
-	'|',
-	CASE CADPRO.ALTERAR_VALOR
-		WHEN 'S' THEN 1
-		ELSE '0'
-	END AS ALTERAR_VALOR,
-	'|',
-	CASE CADPRO.UTILIZABALANCA
-		WHEN 'S' THEN 1
-		ELSE '0'
-	END AS PESAVEL,
-	'|',
-	CADPRO.UNIDADEPRODUTOID,
-	'|',
-	--CADPRO.CODIGONCM,
-	CASE WHEN LEN(LTRIM(RTRIM(COALESCE(CADPRO.CODIGONCM, '')))) > 0
-		THEN CADPRO.CODIGONCM
-		ELSE '12040090' --0025654582
-	END AS NCMFISCALID, /* Em situacoes onde nao existe o NCMFISCALID Relacionado, utilizar esse codigo */
-	'|',
-	CADPRO.CESTFISCALID,
-	'|',
-	CADPRO.ANPFISCALID,
-	'|',	
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(estgru.descricao, '')
-,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
-	'|',
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(CADPRO.MARCA, '')
-,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
-	'|',
-	CADPRO.GENEROFISCALID,
-	'|',
-	CADPRO.EXTIPIFISCALID,
-	'|',
-	case cadpro.ATIVO when 'true' then 1 else 0 end
-FROM CADPRO
-JOIN ESTGRU ON ESTGRU.ID = CADPRO.GRUPO
-WHERE CADPRO.ID > 1
-";
+                    string query = @"
+                   SELECT
+	                    id					-- NOME
+                    FROM localizacaoproduto";
 
                     SqlCommand command = new SqlCommand(query, cn);
                     SqlDataReader reader = command.ExecuteReader();
@@ -1339,7 +1571,181 @@ WHERE CADPRO.ID > 1
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Saldo(string LocalDiretorio)
+        public void Montadora(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"
+                   SELECT
+	                id,					-- Id
+	                '|',				   
+	                descricao,					-- Nome
+	                '|',				   
+	                case ativo when 'true' then 1 else 0 end					-- ativo
+                FROM cadmon -- Tabela";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void Produto(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT
+	        case when CADPRO.ID = 1 then (select max(id) + 1 from CADPRO) else cadpro.id end,
+	        '|',
+	        CADPRO.DESCRICAO,
+	        '|',
+	        CADPRO.REFERENCIA,
+	        '|',
+	        CADPRO.CODIGO_BARRA,
+	        '|',
+	        CADPRO.PESOV,
+	        '|',
+	        CADPRO.VOLUME,
+	        '|',
+	        CASE WHEN CSTICMSID = '060' THEN '0500'
+		         WHEN CSTICMSID = '000' THEN '0102'
+		         ELSE '0102'
+	        END,
+	        '|',
+	        0 AS MONOFASICO,
+	        '|',
+	        0 AS COMBUSTIVEL,
+	        '|',
+	        CASE CADPRO.ALTERAR_VALOR
+		        WHEN 'S' THEN 1
+		        ELSE '0'
+	        END AS ALTERAR_VALOR,
+	        '|',
+	        CASE CADPRO.UTILIZABALANCA
+		        WHEN 'S' THEN 1
+		        ELSE '0'
+	        END AS PESAVEL,
+	        '|',
+	        CADPRO.UNIDADEPRODUTOID,
+	        '|',
+	        --CADPRO.CODIGONCM,
+	        CASE WHEN LEN(LTRIM(RTRIM(COALESCE(CADPRO.CODIGONCM, '')))) > 0
+		        THEN CADPRO.CODIGONCM
+		        ELSE '12040090' --0025654582
+	        END AS NCMFISCALID, /* Em situacoes onde nao existe o NCMFISCALID Relacionado, utilizar esse codigo */
+	        '|',
+	        CADPRO.CESTFISCALID,
+	        '|',
+	        CADPRO.ANPFISCALID,
+	        '|',	
+	        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        COALESCE(estgru.descricao, '')
+        ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
+	        '|',
+	        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        COALESCE(CADPRO.MARCA, '')
+        ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
+	        '|',
+	        CADPRO.GENEROFISCALID,
+	        '|',
+	        CADPRO.EXTIPIFISCALID,
+	        '|',
+	        case cadpro.ATIVO when 'true' then 1 else 0 end
+            '|',
+	    CASE CADPRO.EDITAR
+		    WHEN 'S' THEN 1
+		    ELSE '0'
+	    END AS ALTERADESCRICAO,			--alteradescricaosaida,
+	    '|',
+	    CADPRO.aplicacao,			--aplicacao,
+	    '|',
+	    (SELECT MAX(PROMOCAOQTDV) FROM ESTSAL WHERE ESTSAL.MATRICULA = CADPRO.ID  and filial = 1),			--quantidadepromocao
+	    '|',
+	    CADPRO.DESCRICAO_NF,			--descricaofiscal
+	    '|',
+	    CASE cadpro.tipoitem
+        WHEN 0 THEN '0'
+        WHEN 1 THEN '1'
+        WHEN 4 THEN '4'
+        WHEN 7 THEN '7'
+        WHEN 8 THEN '8'
+        WHEN 99 THEN '99'
+        ELSE '0'
+        END AS TipoItemFiscalDescricao,			--tipoitemfiscal
+	        '|',
+	        (select max(fator_basev) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1),			--fatorpreco
+	        '|',
+	        (select max(fator_baseqtdv) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1)				--fatorquantidade	
+        FROM CADPRO
+        JOIN ESTGRU ON ESTGRU.ID = CADPRO.GRUPO
+        WHERE CADPRO.ID > 1
+        ";
+
+                    SqlCommand command = new SqlCommand(query, cn);
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void Saldo(string LocalDiretorio)
         {
             try
             {
@@ -1375,6 +1781,8 @@ WHERE CADPRO.ID > 1
 	COALESCE(ESTSAL.LUCROV, 0),
 	'|',
 	case ESTSAL.ATIVO when 'true' then 1 else 0 end
+    '|',
+	estsal.descontov
  FROM CADPRO
  JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
  LEFT JOIN (
@@ -1385,8 +1793,10 @@ WHERE CADPRO.ID > 1
  ORDER BY CADPRO.ID ASC
 ";
 
-                    SqlCommand command = new SqlCommand(query, cn) {
-                        CommandTimeout = 600 };
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
                     SqlDataReader reader = command.ExecuteReader();
 
                     StringBuilder resultStringBuilder = new StringBuilder();
@@ -1411,7 +1821,7 @@ WHERE CADPRO.ID > 1
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void GradeProduto(string LocalDiretorio)
+        public void GradeProduto(string LocalDiretorio)
         {
             try
             {
@@ -1439,6 +1849,8 @@ WHERE CADPRO.ID > 1
 	ESTGRA.ESTOQUEFISICO AS QUANTIDADE,
 	'|',
 	case ESTGRA.ATIVO when 'true' then 1 else 0 end
+    '|',
+	estsal.ESTOQUE_MINIMOV
 FROM CADPRO
 JOIN ESTSAL ON ESTSAL.MATRICULA = CADPRO.ID
 JOIN ESTGRA ON ESTGRA.IDESTSAL = ESTSAL.ID
@@ -1474,7 +1886,7 @@ ORDER BY PRODUTOID ASC
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void CodigoBarra(string LocalDiretorio)
+        public void CodigoBarra(string LocalDiretorio)
         {
             try
             {
@@ -1528,7 +1940,7 @@ FROM ESTREL
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void CodigoTerceiro(string LocalDiretorio)
+        public void CodigoTerceiro(string LocalDiretorio)
         {
             try
             {
@@ -1581,7 +1993,155 @@ ORDER BY CODIGOTERCEIROPRODUTO.CADPROID
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Clidoc(string LocalDiretorio)
+        public void ProdutoMontadora(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT
+	                matricula,					-- ProdutoId
+	                '|',				   
+	                montadora					-- MontadoraId
+                    FROM estmon-- Tabela
+                    ";
+
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void ProdutoSimilar(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT
+	                    matricula,					-- ProdutoId
+	                    '|',				   
+	                    similar					-- Similarid
+                    FROM estsim -- Tabela
+                    ";
+
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void ProdutoLocalizacao(string LocalDiretorio)
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = @"SELECT
+	                matricula,					-- ProdutoId
+	                '|',				   
+	                LOCALIZACAOPRODUTOid 					-- Nome Localizacao
+                from ESTSAL_LOCALIZACAOPRODUTO -- Tabela
+                left join estsal on estsal.id = ESTSAL_LOCALIZACAOPRODUTO.estsalid
+                    ";
+
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+        public void Clidoc(string LocalDiretorio)
         {
             try
             {
@@ -1665,7 +2225,7 @@ WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
-       public void Fordoc(string LocalDiretorio)
+        public void Fordoc(string LocalDiretorio)
         {
             try
             {
@@ -1817,7 +2377,7 @@ ORDER BY PRODUTOID ASC
 
 
         //Metodos para os filtros de filial
-        public void Saldo(string LocalDiretorio,string filial)
+        public void Saldo(string LocalDiretorio, string filial)
         {
             try
             {
@@ -1869,7 +2429,7 @@ ORDER BY PRODUTOID ASC
                     };
                     command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
                     SqlDataReader reader = command.ExecuteReader();
-                    
+
                     StringBuilder resultStringBuilder = new StringBuilder();
 
                     while (reader.Read())
@@ -1933,7 +2493,7 @@ ORDER BY PRODUTOID ASC
                     };
                     command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
                     SqlDataReader reader = command.ExecuteReader();
-                    
+
                     StringBuilder resultStringBuilder = new StringBuilder();
 
                     while (reader.Read())
@@ -2017,7 +2577,7 @@ WHERE CLIDOC.VR_PARCELA > COALESCE(CLIDOC.VR_PAGO, 0) AND CLIDOC.ATIVO = 1 and c
                     SqlCommand command = new SqlCommand(query, cn);
                     command.Parameters.Add(new SqlParameter("@filial", SqlDbType.NVarChar) { Value = filial });
                     SqlDataReader reader = command.ExecuteReader();
-                   
+
                     StringBuilder resultStringBuilder = new StringBuilder();
 
                     while (reader.Read())

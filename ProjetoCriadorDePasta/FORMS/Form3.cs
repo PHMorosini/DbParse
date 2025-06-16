@@ -106,10 +106,14 @@ namespace ProjetoCriadorDePasta.FORMS
                         string clienteemail = Path.Combine(folderPath, "05.3 - EMAILCLIENTE.txt");
                         string clientedependente = Path.Combine(folderPath, "05.4 - DEPENDENTECONJUGE.txt");
 
+                        await Task.Run(() => minhaQuerry.SituacaoCliente(situacaoCliente));
+                        await Task.Run(() => minhaQuerry.TipoCliente(tipoCliente));
+                        await Task.Run(() => minhaQuerry.Usuario(usuario));
                         await Task.Run(() => minhaQuerry.Cliente(client));
                         await Task.Run(() => minhaQuerry.Cliente_Endereco(clientendereco));
                         await Task.Run(() => minhaQuerry.Cliente_Telefone(clientetelefone));
                         await Task.Run(() => minhaQuerry.Cliente_Email(clienteemail));
+                        await Task.Run(() => minhaQuerry.Cliente_DependenteConjuge(clientedependente));
                     }
 
                     //fornecedor
@@ -151,6 +155,7 @@ namespace ProjetoCriadorDePasta.FORMS
                     await Task.Run(() => minhaQuerry.Grupo(grupo));
                     await Task.Run(() => minhaQuerry.Grades(grade));
 
+
                     //cadastro de produtos
                     string produto = Path.Combine(folderPath, "16 - PRODUTOS.txt");
                     string saldo = Path.Combine(folderPath, "16.1 - PRECOS PRODUTOS.txt");
@@ -163,7 +168,12 @@ namespace ProjetoCriadorDePasta.FORMS
 
                     if (cbProduto.Checked == true)
                     {
+                        await Task.Run(() => minhaQuerry.Localizacao(localizacao));
+                        await Task.Run(() => minhaQuerry.Montadora(montadora));
                         await Task.Run(() => minhaQuerry.Produto(produto));
+                        await Task.Run(() => minhaQuerry.ProdutoMontadora(produtomontadora));
+                        await Task.Run(() => minhaQuerry.ProdutoSimilar(produtosimilar));
+                        await Task.Run(() => minhaQuerry.ProdutoLocalizacao(produtolocalizacao));
 
                         if (cbFilial1.Checked)
                         {
