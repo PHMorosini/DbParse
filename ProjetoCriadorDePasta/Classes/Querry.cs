@@ -37,6 +37,51 @@ namespace ProjetoCriadorDePasta.Classes
             }
         }
 
+        public void SituacaoCliente(string LocalDiretorio) 
+        {
+            try
+            {
+                // Verificar se o diretório existe e garantir permissões
+                string directory = Path.GetDirectoryName(LocalDiretorio);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
+                {
+                    cn.Open();
+                    string query = "";
+                    SqlCommand command = new SqlCommand(query, cn)
+                    {
+                        CommandTimeout = 600
+                    };
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    StringBuilder resultStringBuilder = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            resultStringBuilder.Append(reader[i].ToString());
+                        }
+                        resultStringBuilder.AppendLine(); // Nova linha para cada registro
+                    }
+
+                    File.WriteAllText(LocalDiretorio, resultStringBuilder.ToString());
+                    cn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex.Message);
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
         public void Cliente(string LocalDiretorio)
         {
             try

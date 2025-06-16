@@ -92,14 +92,20 @@ namespace ProjetoCriadorDePasta.FORMS
             {
                 if (folderPath.Length > 0)
                 {
-                    //cliente
-                    string client = Path.Combine(folderPath, "01 - CLIENTES.txt");
-                    string clientendereco = Path.Combine(folderPath, "01.1 - ENDERECOCLIENTE.txt");
-                    string clientetelefone = Path.Combine(folderPath, "01.2 - TELEFONECLIENTE.txt");
-                    string clienteemail = Path.Combine(folderPath, "01.3 - EMAILCLIENTE.txt");
+                   
+                    string situacaoCliente = Path.Combine(folderPath, "01 - SITUACAOCLIENTE.txt");
+                    string tipoCliente = Path.Combine(folderPath, "02 - TIPOCLIENTE.txt");
+                    string usuario = Path.Combine(folderPath, "03 - USUARIO.txt");
+                    string grade = Path.Combine(folderPath, "04 - GRADES.txt");
 
                     if (cbCliente.Checked == true)
                     {
+                        string client = Path.Combine(folderPath, "05 - CLIENTE.txt");
+                        string clientendereco = Path.Combine(folderPath, "05.1 - ENDERECOCLIENTE.txt");
+                        string clientetelefone = Path.Combine(folderPath, "05.2 - TELEFONECLIENTE.txt");
+                        string clienteemail = Path.Combine(folderPath, "05.3 - EMAILCLIENTE.txt");
+                        string clientedependente = Path.Combine(folderPath, "05.4 - DEPENDENTECONJUGE.txt");
+
                         await Task.Run(() => minhaQuerry.Cliente(client));
                         await Task.Run(() => minhaQuerry.Cliente_Endereco(clientendereco));
                         await Task.Run(() => minhaQuerry.Cliente_Telefone(clientetelefone));
@@ -109,11 +115,11 @@ namespace ProjetoCriadorDePasta.FORMS
                     //fornecedor
                     if (cbFornecedor.Checked == true)
                     {
-                        string fornecedor = Path.Combine(folderPath, "02 - FORNECEDOR.txt");
-                        string fornecedorendereco = Path.Combine(folderPath, "02.1 - ENDERECOFORNECEDOR.txt");
-                        string fornecedortelefone = Path.Combine(folderPath, "02.2 - TELEFONEFORNECEDOR.txt");
-                        string fornecedoremail = Path.Combine(folderPath, "02.3 - EMAILFORNECEDOR.txt");
-                        string fornecedorcontato = Path.Combine(folderPath, "02.4 - CONTATOFORNECEDOR.txt");
+                        string fornecedor = Path.Combine(folderPath, "06 - FORNECEDOR.txt");
+                        string fornecedorendereco = Path.Combine(folderPath, "06.1 - ENDERECOFORNECEDOR.txt");
+                        string fornecedortelefone = Path.Combine(folderPath, "06.2 - TELEFONEFORNECEDOR.txt");
+                        string fornecedoremail = Path.Combine(folderPath, "06.3 - EMAILFORNECEDOR.txt");
+                        string fornecedorcontato = Path.Combine(folderPath, "06.4 - CONTATOFORNECEDOR.txt");
 
                         await Task.Run(() => minhaQuerry.Fornecedor(fornecedor));
                         await Task.Run(() => minhaQuerry.Fornecedor_Endereco(fornecedorendereco));
@@ -123,10 +129,10 @@ namespace ProjetoCriadorDePasta.FORMS
                     }
 
                     //NCMS E CESTS
-                    string ncm = Path.Combine(folderPath, "04 - NCMFISCAL.txt");
-                    string cest = Path.Combine(folderPath, "03 - CESTFISCAL.txt");
-                    string cestxncm = Path.Combine(folderPath, "05 - CESTFISCALXNCMFISCAL.txt");
-                    string markup = Path.Combine(folderPath, "06 - MARKUP.txt");
+                    string cest = Path.Combine(folderPath, "07 - CESTFISCAL.txt");
+                    string ncm = Path.Combine(folderPath, "08 - NCMFISCAL.txt");
+                    string cestxncm = Path.Combine(folderPath, "09 - CESTFISCALXNCMFISCAL.txt");
+                    string markup = Path.Combine(folderPath, "10 - MARKUP.txt");
 
                     await Task.Run(() => minhaQuerry.cest(cest));
                     await Task.Run(() => minhaQuerry.ncm(ncm));
@@ -134,10 +140,11 @@ namespace ProjetoCriadorDePasta.FORMS
                     await Task.Run(() => minhaQuerry.markup(markup));
 
                     //cadastros de unidade,marca e grupo
-                    string unidade = Path.Combine(folderPath, "07 - UNIDADES.txt");
-                    string marca = Path.Combine(folderPath, "08 - MARCAS.txt");
-                    string grupo = Path.Combine(folderPath, "09 - GRUPOS.txt");
-                    string grade = Path.Combine(folderPath, "10 - GRADES.txt");
+                    string unidade = Path.Combine(folderPath, "11 - UNIDADES.txt");
+                    string marca = Path.Combine(folderPath, "12 - MARCAS.txt");
+                    string grupo = Path.Combine(folderPath, "13 - GRUPOS.txt");
+                    string localizacao = Path.Combine(folderPath, "14 - LOCALIZACAO.txt");
+                    string montadora = Path.Combine(folderPath, "15 - MONTADORA.txt");
 
                     await Task.Run(() => minhaQuerry.Unidade(unidade));
                     await Task.Run(() => minhaQuerry.Marca(marca));
@@ -145,11 +152,14 @@ namespace ProjetoCriadorDePasta.FORMS
                     await Task.Run(() => minhaQuerry.Grades(grade));
 
                     //cadastro de produtos
-                    string produto = Path.Combine(folderPath, "11 - PRODUTOS.txt");
-                    string saldo = Path.Combine(folderPath, "11.1 - PRECOS PRODUTOS.txt");
-                    string gradeproduto = Path.Combine(folderPath, "11.2 - GRADES PRODUTOS.TXT");
-                    string codigobarra = Path.Combine(folderPath, "11.3 - CODIGOSBARRASPRODUTO.txt");
-                    string codigoterceiro = Path.Combine(folderPath, "11.4 - CODIGOSTERCEIROSPRODUTO.txt");
+                    string produto = Path.Combine(folderPath, "16 - PRODUTOS.txt");
+                    string saldo = Path.Combine(folderPath, "16.1 - PRECOS PRODUTOS.txt");
+                    string gradeproduto = Path.Combine(folderPath, "16.2 - GRADES PRODUTOS.txt");
+                    string codigobarra = Path.Combine(folderPath, "16.3 - CODIGOSBARRASPRODUTO.txt");
+                    string codigoterceiro = Path.Combine(folderPath, "16.4 - CODIGOSTERCEIROSPRODUTO.txt");
+                    string produtomontadora = Path.Combine(folderPath, "16.5 - PRODUTOMONTADORA.txt");
+                    string produtosimilar = Path.Combine(folderPath, "16.6 - PRODUTOSIMILAR.txt");
+                    string produtolocalizacao = Path.Combine(folderPath, "16.7 - PRODUTOLOCALIZACAO.txt");
 
                     if (cbProduto.Checked == true)
                     {
@@ -212,7 +222,7 @@ namespace ProjetoCriadorDePasta.FORMS
                     //documento financeiro
                     if (cbClidoc.Checked == true)
                     {
-                        string clidoc = Path.Combine(folderPath, "12.1 - DOCUMENTOFINANCEIROCLIENTE.txt");
+                        string clidoc = Path.Combine(folderPath, "17.1 - DOCUMENTOFINANCEIROCLIENTE.txt");
 
                         if (cbFilial1.Checked)
                         {
@@ -234,7 +244,7 @@ namespace ProjetoCriadorDePasta.FORMS
 
                     if (cbFordoc.Checked == true)
                     {
-                        string fordoc = Path.Combine(folderPath, "12.2 - DOCUMENTOFINANCEIROFORNECEDOR.txt");
+                        string fordoc = Path.Combine(folderPath, "17.2 - DOCUMENTOFINANCEIROFORNECEDOR.txt");
 
                         if (cbFilial1.Checked)
                         {
