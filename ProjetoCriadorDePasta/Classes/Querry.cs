@@ -1689,7 +1689,7 @@ ORDER BY COUNT(*) DESC
 	        '|',
 	        CADPRO.EXTIPIFISCALID,
 	        '|',
-	        case cadpro.ATIVO when 'true' then 1 else 0 end
+	        case cadpro.ATIVO when 'true' then 1 else 0 end,
             '|',
 	    CASE CADPRO.EDITAR
 		    WHEN 'S' THEN 1
@@ -1780,7 +1780,7 @@ ORDER BY COUNT(*) DESC
 	'|',
 	COALESCE(ESTSAL.LUCROV, 0),
 	'|',
-	case ESTSAL.ATIVO when 'true' then 1 else 0 end
+	case ESTSAL.ATIVO when 'true' then 1 else 0 end,
     '|',
 	estsal.descontov
  FROM CADPRO
@@ -1848,7 +1848,7 @@ ORDER BY COUNT(*) DESC
 	'|',
 	ESTGRA.ESTOQUEFISICO AS QUANTIDADE,
 	'|',
-	case ESTGRA.ATIVO when 'true' then 1 else 0 end
+	case ESTGRA.ATIVO when 'true' then 1 else 0 end,
     '|',
 	estsal.ESTOQUE_MINIMOV
 FROM CADPRO
