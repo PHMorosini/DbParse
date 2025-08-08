@@ -64,9 +64,19 @@ namespace ProjetoCriadorDePasta.FORMS
 
         private void btPesquisaDiretorio_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.ShowDialog();
-            txtDiretorio.Text = dlg.SelectedPath;
+            using (var dlg = new OpenFileDialog())
+            {
+                dlg.ValidateNames = false;  // Permite selecionar "não arquivos"
+                dlg.CheckFileExists = false;
+                dlg.CheckPathExists = true;
+                dlg.FileName = "Selecione esta pasta"; // é para pegar a pasta
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    string folderPath = Path.GetDirectoryName(dlg.FileName);
+                    txtDiretorio.Text = folderPath;
+                }
+            }
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -85,14 +95,14 @@ namespace ProjetoCriadorDePasta.FORMS
             Querry minhaQuerry = new Querry();
             string folderPath = txtDiretorio.Text;
             string filialescolhida = txtFilial.Text;
-            
+
             minhaQuerry.CorrecoesBanco();
 
             try
             {
                 if (folderPath.Length > 0)
                 {
-                   
+
                     string situacaoCliente = Path.Combine(folderPath, "01 - SITUACAOCLIENTE.txt");
                     string tipoCliente = Path.Combine(folderPath, "02 - TIPOCLIENTE.txt");
                     string usuario = Path.Combine(folderPath, "03 - USUARIO.txt");
@@ -187,7 +197,7 @@ namespace ProjetoCriadorDePasta.FORMS
                         {
                             await Task.Run(() => minhaQuerry.Saldo(saldo, filialescolhida));
                         }
-                        else if(cbReplicarEstoque.Checked)
+                        else if (cbReplicarEstoque.Checked)
                         {
                             await Task.Run(() => minhaQuerry.SaldoReplicarFilial1(saldo));
                         }
@@ -212,7 +222,7 @@ namespace ProjetoCriadorDePasta.FORMS
                         {
                             await Task.Run(() => minhaQuerry.GradeProduto(gradeproduto, filialescolhida));
                         }
-                        else  if (cbReplicarEstoque.Checked)
+                        else if (cbReplicarEstoque.Checked)
                         {
                             await Task.Run(() => minhaQuerry.GradeProdutoReplicarFilial1(gradeproduto));
                         }
@@ -295,18 +305,18 @@ namespace ProjetoCriadorDePasta.FORMS
 
         private void cbFilial2_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbFilial2.Checked) { txtFilial.ReadOnly = true; cbFilial1.Checked = false; cbReplicarEstoque.Checked = false; cbSaldoZerado.Checked = false; } 
+            if (cbFilial2.Checked) { txtFilial.ReadOnly = true; cbFilial1.Checked = false; cbReplicarEstoque.Checked = false; cbSaldoZerado.Checked = false; }
             DesbloquearTextBoxFilial();
         }
 
         private void cbFilial1_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbFilial1.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false; cbReplicarEstoque.Checked = false;cbSaldoZerado.Checked = false; } 
+            if (cbFilial1.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false; cbReplicarEstoque.Checked = false; cbSaldoZerado.Checked = false; }
             DesbloquearTextBoxFilial();
 
         }
 
-        private void DesbloquearTextBoxFilial() 
+        private void DesbloquearTextBoxFilial()
         {
             if (cbFilial1.Checked == false && cbFilial2.Checked == false && cbReplicarEstoque.Checked == false && cbSaldoZerado.Checked == false) { txtFilial.ReadOnly = false; }
         }
@@ -340,7 +350,7 @@ namespace ProjetoCriadorDePasta.FORMS
 
         private void cbReplicarEstoque_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbReplicarEstoque.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false;cbFilial1.Checked = false; cbSaldoZerado.Checked = false; }
+            if (cbReplicarEstoque.Checked) { txtFilial.ReadOnly = true; cbFilial2.Checked = false; cbFilial1.Checked = false; cbSaldoZerado.Checked = false; }
             DesbloquearTextBoxFilial();
         }
 
