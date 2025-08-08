@@ -221,8 +221,7 @@ namespace ProjetoCriadorDePasta.Classes
                 using (SqlConnection cn = new SqlConnection(Conn2.StrCon))
                 {
                     cn.Open();
-                    string query = @"
-                    SELECT distinct
+                    string query = @"SELECT distinct
 	PESSOA.ID,
 	'|',
 	CASE WHEN PESSOA.TIPONATUREZA = 'F' THEN 1
@@ -232,21 +231,21 @@ namespace ProjetoCriadorDePasta.Classes
 	CNPJCPF,
 	'|',
 	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(PESSOA.NOME, '')
+COALESCE(pessoa.nome, '')
 ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
 	'|',
 	CASE 
 		WHEN LEN(PESSOA.PSEUDONIMO) < 2 THEN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(PESSOA.NOME, '')
+COALESCE( pessoa.nome, '')
 ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-','')
 		WHEN PESSOA.PSEUDONIMO IS NULL THEN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(PESSOA.NOME, '')
+COALESCE(pessoa.nome, '')
 ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-','')
 		WHEN PESSOA.PSEUDONIMO = '' THEN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(PESSOA.NOME, '')
+COALESCE(pessoa.nome, '')
 ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-','')
 	ELSE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(PESSOA.PSEUDONIMO, '')
+COALESCE(pessoa.PSEUDONIMO, '')
 ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-','')
 	END,
 	'|',
@@ -258,20 +257,29 @@ COALESCE(PESSOA.PSEUDONIMO, '')
 	'|',
 	REPLACE(REPLACE(REPLACE(COALESCE(PESSOA.OBSERVACAOINTERNA, ''), CHAR(10), ''), CHAR(13), ''), '|', ''),
 	'|',
-	case when PESSOA.INSCRICAOESTADUAL <> '' and PESSOA.INSCRICAOESTADUAL <> 'ISENTO' then 1
+	case 
 	when PESSOA.INSCRICAOESTADUAL = 'ISENTO' then 2
-	when PESSOA.INSCRICAOESTADUAL = '' then 9 else 9 end as contribuinte,			
+	WHEN PESSOA.INSCRICAOESTADUAL = 'NULL' then 9
+	when PESSOA.INSCRICAOESTADUAL = ''  then 9 
+	when PESSOA.INSCRICAOESTADUAL <> '' and PESSOA.INSCRICAOESTADUAL <> 'ISENTO' then 1 else 9 end as contribuinte,		
 	'|',
 	0 AS PERMITEAPROVEITAMENTOCREDITO,
 	'|',
-	CASE 
-     WHEN PESSOA.ATIVO = 'true' THEN 1 
-    ELSE 0 
-     END AS ATIVO,
+	PESSOA.ATIVO,
 	'|',
-    COALESCE((SELECT FILIAL FROM CADCLI WHERE CADCLI.CLIENTE = PESSOA.ID),(SELECT TOP 1 ID FROM CADFIL WHERE ATIVO = 1 ORDER BY ID ASC)),
+	CASE 
+		WHEN COALESCE(
+				(SELECT FILIAL FROM CADCLI WHERE CADCLI.CLIENTE = PESSOA.ID),
+				(SELECT TOP 1 ID FROM CADFIL WHERE ATIVO = 1 ORDER BY ID ASC)
+			) = 1 THEN 1
+		WHEN COALESCE(
+				(SELECT FILIAL FROM CADCLI WHERE CADCLI.CLIENTE = PESSOA.ID),
+				(SELECT TOP 1 ID FROM CADFIL WHERE ATIVO = 1 ORDER BY ID ASC)
+			) = 30 THEN 2
+		ELSE 99 -- valor padrão, caso não atenda nenhuma condição
+	END AS filial,	
 	'|',				   
-	coalesce(cadcli.IDENTIDADE,''),					-- Identidade
+	coalesce(cadcli.IDENTIDADE,''),	-- Identidade
 	'|',				   
 	coalesce(CADCLI.ORGAOIDENTIDADE,''), -- Orgao expeditor
 	'|',					   
@@ -346,15 +354,23 @@ END,					-- Sexo
 	'|',				   
 	coalesce(CONVERT(VARCHAR(10), dtsituacao, 103),''),					-- Datasituacao
 	'|',				   
-	case coalesce(cast(vendedor as varchar),'') when '0' then '' else coalesce(cast(vendedor + 2 as varchar),'') end,					-- VendedorID
+	'NULL',					-- VendedorID
 	'|',				   
 	COALESCE(tipo,''),					-- TipoclienteId	
 	'|',				   
 	COALESCE(grade,''),					-- ComplementoGrade
-	'|'	,				   
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-COALESCE(cadcli.alerta, '')
-,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),				-- Alerta	
+	'|'	,		
+	REPLACE(
+		REPLACE(
+			REPLACE(
+				REPLACE(
+					REPLACE(
+						COALESCE(CADCLI.ALERTA, '') COLLATE Latin1_General_CI_AI, 
+					CHAR(13), ' '),
+				CHAR(10), ' '),
+			CHAR(9), ' '),
+		'|', ''),
+	NCHAR(160), ' ') AS alerta,
 	'|'	,	
 	case cast(tipovencimento as varchar) when '0' then '1'
 	when '1' then '2'
@@ -500,7 +516,7 @@ ORDER BY PESSOA.ID ASC";
 	'|',
 	1
 FROM PESSOATELEFONE
-WHERE PESSOAID < 999999 and telefone <> '' and tipotelefone <> '2'
+WHERE PESSOAID < 999999 and telefone <> '' and tipotelefone <> '2' and telefone <> 'NULL'
 
 UNION ALL
 
@@ -565,7 +581,7 @@ where celular <> 'NULL' and celular <> ''
 	'|',
 	case ATIVO when 'true' then 1 else 0 end as ativo
 FROM PESSOAEMAIL
-WHERE PESSOAID < 999999
+WHERE PESSOAID < 999999 and EMAIL <> 'NULL'
 ORDER BY PESSOAID ASC
 ";
 
@@ -1634,91 +1650,94 @@ ORDER BY COUNT(*) DESC
                 {
                     cn.Open();
                     string query = @"SELECT
-	        case when CADPRO.ID = 1 then (select max(id) + 1 from CADPRO) else cadpro.id end,
-	        '|',
-	        CADPRO.DESCRICAO,
-	        '|',
-	        CADPRO.REFERENCIA,
-	        '|',
-	        CADPRO.CODIGO_BARRA,
-	        '|',
-	        CADPRO.PESOV,
-	        '|',
-	        CADPRO.VOLUME,
-	        '|',
-	        CASE WHEN CSTICMSID = '060' THEN '0500'
-		         WHEN CSTICMSID = '000' THEN '0102'
-		         ELSE '0102'
-	        END,
-	        '|',
-	        0 AS MONOFASICO,
-	        '|',
-	        0 AS COMBUSTIVEL,
-	        '|',
-	        CASE CADPRO.ALTERAR_VALOR
-		        WHEN 'S' THEN 1
-		        ELSE '0'
-	        END AS ALTERAR_VALOR,
-	        '|',
-	        CASE CADPRO.UTILIZABALANCA
-		        WHEN 'S' THEN 1
-		        ELSE '0'
-	        END AS PESAVEL,
-	        '|',
-	        CADPRO.UNIDADEPRODUTOID,
-	        '|',
-	        --CADPRO.CODIGONCM,
-	        CASE WHEN LEN(LTRIM(RTRIM(COALESCE(CADPRO.CODIGONCM, '')))) > 0
-		        THEN CADPRO.CODIGONCM
-		        ELSE '12040090' --0025654582
-	        END AS NCMFISCALID, /* Em situacoes onde nao existe o NCMFISCALID Relacionado, utilizar esse codigo */
-	        '|',
-	        CADPRO.CESTFISCALID,
-	        '|',
-	        CADPRO.ANPFISCALID,
-	        '|',	
-	        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-        COALESCE(estgru.descricao, '')
-        ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
-	        '|',
-	        REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-        COALESCE(CADPRO.MARCA, '')
-        ,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
-	        '|',
-	        CADPRO.GENEROFISCALID,
-	        '|',
-	        CADPRO.EXTIPIFISCALID,
-	        '|',
-	        case cadpro.ATIVO when 'true' then 1 else 0 end,
-            '|',
-	    CASE CADPRO.EDITAR
-		    WHEN 'S' THEN 1
-		    ELSE '0'
-	    END AS ALTERADESCRICAO,			--alteradescricaosaida,
-	    '|',
-	    CADPRO.aplicacao,			--aplicacao,
-	    '|',
-	    (SELECT MAX(PROMOCAOQTDV) FROM ESTSAL WHERE ESTSAL.MATRICULA = CADPRO.ID  and filial = 1),			--quantidadepromocao
-	    '|',
-	    CADPRO.DESCRICAO_NF,			--descricaofiscal
-	    '|',
-	    CASE cadpro.tipoitem
-        WHEN 0 THEN '0'
-        WHEN 1 THEN '1'
-        WHEN 4 THEN '4'
-        WHEN 7 THEN '7'
-        WHEN 8 THEN '8'
-        WHEN 99 THEN '99'
-        ELSE '0'
-        END AS TipoItemFiscalDescricao,			--tipoitemfiscal
-	        '|',
-	        (select max(fator_basev) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1),			--fatorpreco
-	        '|',
-	        (select max(fator_baseqtdv) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1)				--fatorquantidade	
-        FROM CADPRO
-        JOIN ESTGRU ON ESTGRU.ID = CADPRO.GRUPO
-        WHERE CADPRO.ID > 1
-        ";
+	CADPRO.ID,
+	'|',
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+COALESCE(cadpro.descricao, '')
+,'Ç','C'),'Ñ','N'),'Ý','Y'),'Á','A'),'À','A'),'Â','A'),'Ã','A'),'Ä','A'),'É','E'),'È','E'),'Ê','E'),'Ë','E'),'Í','I'),'Ì','I'),'Î','I'),'Ï','I'),'Ó','O'),'Ò','O'),'Ô','O'),'Õ','O'),'Ö','O'),'Ú','U'),'Ù','U'),'Û','U'),'Ü','U'),'–',''),'-',''),
+	'|',
+	CADPRO.REFERENCIA,
+	'|',
+	CADPRO.CODIGO_BARRA,
+	'|',
+	CADPRO.PESOV,
+	'|',
+	CADPRO.VOLUME,
+	'|',
+	CASE WHEN CSTICMSID = '060' THEN '0500'
+		 WHEN CSTICMSID = '000' THEN '0102'
+		 ELSE '0102'
+	END,
+	'|',
+	0 AS MONOFASICO,
+	'|',
+	0 AS COMBUSTIVEL,
+	'|',
+	CASE CADPRO.ALTERAR_VALOR
+		WHEN 'S' THEN 1
+		ELSE '0'
+	END AS ALTERAR_VALOR,
+	'|',
+	CASE CADPRO.UTILIZABALANCA
+		WHEN 'S' THEN 1
+		ELSE '0'
+	END AS PESAVEL,
+	'|',
+	CADPRO.UNIDADEPRODUTOID,
+	'|',
+	--CADPRO.CODIGONCM,
+	CASE WHEN LEN(LTRIM(RTRIM(COALESCE(CADPRO.CODIGONCM, '')))) > 0
+		THEN CADPRO.CODIGONCM
+		ELSE '12040090' --0025654582
+	END AS NCMFISCALID, /* Em situacoes onde nao existe o NCMFISCALID Relacionado, utilizar esse codigo */
+	'|',
+	CADPRO.CESTFISCALID,
+	'|',
+	CADPRO.ANPFISCALID,
+	'|',	
+	ESTGRU.DESCRICAO,
+	'|',
+	CADPRO.MARCA,
+	'|',
+	CADPRO.GENEROFISCALID,
+	'|',
+	CADPRO.EXTIPIFISCALID,
+	'|',
+	CADPRO.ATIVO,
+	'|',
+	CASE CADPRO.EDITAR
+		WHEN 'S' THEN 1
+		ELSE '0'
+	END AS ALTERADESCRICAO,			--alteradescricaosaida,
+	'|',
+	CADPRO.aplicacao,			--aplicacao,
+	'|',
+case 
+	when (SELECT MAX(PROMOCAOQTDV) FROM ESTSAL WHERE ESTSAL.MATRICULA = CADPRO.ID  and filial = 1) is null then 0.0000
+	else (SELECT MAX(PROMOCAOQTDV) FROM ESTSAL WHERE ESTSAL.MATRICULA = CADPRO.ID  and filial = 1) end as quantidadepromocao,			--quantidadepromocao
+	'|',
+	CADPRO.DESCRICAO_NF,			--descricaofiscal
+	'|',
+	CASE cadpro.tipoitem
+    WHEN 0 THEN '0'
+    WHEN 1 THEN '1'
+    WHEN 4 THEN '4'
+    WHEN 7 THEN '7'
+    WHEN 8 THEN '8'
+    WHEN 99 THEN '99'
+    ELSE '0'
+END AS TipoItemFiscalDescricao,			--tipoitemfiscal
+	'|',
+case 
+	when (select max(fator_basev) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1) is null then 0.0000
+	else (select max(fator_basev) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1) end as fatorpreco,			--quantidadepromocao
+	'|',
+case 
+	when (select max(fator_baseqtdv) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1) is null then 0.0000
+	else (select max(fator_baseqtdv) from estsal  WHERE ESTSAL.MATRICULA = CADPRO.ID and filial = 1) end as fatorpreco			--fatorquantidade	
+FROM CADPRO
+JOIN ESTGRU ON ESTGRU.ID = CADPRO.GRUPO
+WHERE CADPRO.ID > 1";
 
                     SqlCommand command = new SqlCommand(query, cn);
                     SqlDataReader reader = command.ExecuteReader();
